@@ -3,8 +3,7 @@ package com.abekirev.dbd.entity
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
-data class User(val id: Long,
-                val name: String,
+data class User(val name: String,
                 val credentialsNonExpired: Boolean,
                 val accountNonExpired: Boolean,
                 val accountNonLocked: Boolean,

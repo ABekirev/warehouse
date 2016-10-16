@@ -1,0 +1,56 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    background: url("/static/img/chess.jpg") no-repeat;
+    background-size: 100%;
+}
+
+.navbar {
+    margin-bottom: 10px;
+}
+
+#login {
+    width: 480px;
+    margin: auto;
+}
+
+#login table {
+    display: inline;
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
+#login table {
+    text-align: left;
+}
+
+.roundedPanel {
+    color: white;
+    background-color: rgba(0,0,0,0.9);
+    border-radius: 15px;
+}
+
+#signInButton {
+    margin-top: 5px;
+    padding-bottom: 5px;
+    color: black;
+}
+
+#greetings {
+    margin-top: 10px;
+}
+
+#tournamentTable {
+    font-size: medium;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#tournamentTable table {
+    border: solid white;
+    text-align: center;
+}
+
+#tournamentTable table th {
+    text-align: center;
+}

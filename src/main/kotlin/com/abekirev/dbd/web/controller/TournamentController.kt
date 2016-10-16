@@ -1,0 +1,57 @@
+package com.abekirev.dbd.web.controller
+
+import com.abekirev.dbd.entity.IPlayer
+import com.abekirev.dbd.entity.Player
+import com.abekirev.dbd.entity.PlayerGameResult
+import com.abekirev.dbd.entity.bergerCoef
+import com.abekirev.dbd.entity.gameResult
+import com.abekirev.dbd.entity.isWhite
+import com.abekirev.dbd.entity.points
+import com.abekirev.dbd.service.PlayerService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Controller
+import org.springframework.ui.ModelMap
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import java.util.*
+
+@Controller
+@RequestMapping("/tournament/")
+class TournamentController @Autowired constructor(private val playerService: PlayerService) {
+
+    @RequestMapping("table/", method = arrayOf(RequestMethod.GET))
+    fun table(modelMap: ModelMap): String {
+        val players = playerService.getAll()
+        val bergerCoefByPlayer = players.map { it.id to it.bergerCoef(players) }.toMap()
+        val sortedPlayers = players
+                .sortedWith(Comparator { p1, p2 -> -bergerCoefByPlayer[p1.id]!!.compareTo(bergerCoefByPlayer[p2.id]!!) })
+                .map(Player::id)
+        val results = players.map { player ->
+            ResultRow(
+                    player,
+                    player.games.map { game ->
+                        when {
+                            player.isWhite(game) -> game.blackPlayer
+                            else -> game.whitePlayer
+                        }.id to when (player.gameResult(game)) {
+                            is PlayerGameResult.Won -> "1"
+                            is PlayerGameResult.Lost -> "0"
+                            is PlayerGameResult.Draw -> "1/2"
+                        }
+                    }.toMap(),
+                    player.points(),
+                    bergerCoefByPlayer[player.id]!!,
+                    1 + sortedPlayers.indexOf(player.id)
+            )
+        }
+        modelMap.addAttribute("results", results)
+        return "tournament/table"
+    }
+
+    class ResultRow(private val p: IPlayer, val gameResults: Map<String, String>, val points: Double, val bergerCoef: Double, val place: Int?) : IPlayer by p
+
+    @RequestMapping("schedule/", method = arrayOf(RequestMethod.GET))
+    fun schedule(modelMap: ModelMap): String {
+        return "home"
+    }
+}

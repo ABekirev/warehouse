@@ -1,21 +1,30 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="base">
 <head>
-    <title>Spring Security Example </title>
+    <title>Форма входа</title>
 </head>
 <body>
-<div th:if="${param.error}">
-    Invalid username and password.
+<div layout:fragment="content">
+    <div id="login" class="text-center roundedPanel">
+        <h1>Вход</h1>
+        <form th:action="@{/login}" method="post">
+            <table>
+                <tbody>
+                    <tr>
+                        <td><label> Имя пользователя :</label></td>
+                        <td><input type="text" name="username"/></td>
+                    </tr>
+                    <tr>
+                        <td><label> Пароль :</label></td>
+                        <td><input type="password" name="password"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="signInButton"><input type="submit" value="Sign In"/></div>
+        </form>
+    </div>
 </div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<h1>Best login form ever</h1>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
 </body>
 </html>

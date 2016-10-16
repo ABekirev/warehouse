@@ -17,7 +17,7 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 
 jar {
-	baseName = 'warehouse'
+	baseName = 'chess'
 	version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
@@ -36,6 +36,7 @@ repositories {
 
 
 dependencies {
+	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-cache')
 	compile('org.springframework.boot:spring-boot-starter-mail')
@@ -45,6 +46,10 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-websocket')
+
+	compile('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:1.4.0')
+	compile group: 'org.apache.commons', name: 'commons-io', version: '1.3.2'
+
 	compile("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
 	compile('org.jetbrains.kotlin:kotlin-nosql-mongodb:0.1-SNAPSHOT')
 	compile('org.funktionale:funktionale:0.9.5')

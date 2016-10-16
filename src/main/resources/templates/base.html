@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet"
+          th:href="@{/static/css/main.css}" href="/static/css/main.css"/>
+    <link rel="stylesheet"
+          th:href="@{/static/bootstrap/css/bootstrap.min.css}"
+          href="/static/bootstrap/css/bootstrap.css"/>
+    <script th:src="@{/static/js/jquery-1.12.4.min.js}"
+            src="/static/js/jquery-1.12.4.js"></script>
+    <script th:src="@{/static/bootstrap/js/bootstrap.min.js}"
+            src="/static/bootstrap/js/bootstrap.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div class="container">
+        <div th:replace="fragments/header :: header">&nbsp;</div>
+        <div layout:fragment="content">
+            <h1>Static content for prototyping purposes only</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+                Phasellus et placerat elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+                Phasellus et placerat elit.
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

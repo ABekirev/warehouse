@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="base">
+<head>
+    <title>Таблица турнира</title>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid">
+    <div id="tournamentTable" class="roundedPanel">
+        <table border="1" cellspacing="0" cellpadding="0" align="center">
+            <!--/*@thymesVar id="results" type="java.util.Collection<abekirev.dbd.web.controller.TournamentController.ResultRow>"*/-->
+            <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Фамилия</th>
+                <th th:each="result, itStatus : ${results}" th:text="${itStatus.count}"></th>
+                <th>Очки</th>
+                <th>КБ</th>
+                <th>Место</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="result1, itStatus1 : ${results}">
+                <td th:text="${itStatus1.count}"></td>
+                <td th:text="${result1.secondName + ' ' + result1.firstName}"></td>
+                <td th:each="result2, itStatus2 : ${results}" th:with="result = ${result1.gameResults[result2.id]}" th:text="${result == null ? 'X' : result}"></td>
+                <td th:text="${result1.points}"></td>
+                <td th:text="${result1.bergerCoef}"></td>
+                <td th:text="${result1.place}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
