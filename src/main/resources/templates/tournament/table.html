@@ -8,12 +8,12 @@
 <body>
 <div layout:fragment="content" class="container-fluid">
     <div id="tournamentTable" class="roundedPanel">
-        <table border="1" cellspacing="0" cellpadding="0" align="center">
+        <table class="whiteBorderedTable">
             <!--/*@thymesVar id="results" type="java.util.Collection<abekirev.dbd.web.controller.TournamentController.ResultRow>"*/-->
             <thead>
             <tr>
                 <th>Номер</th>
-                <th>Фамилия</th>
+                <th>Фамилия Имя</th>
                 <th th:each="result, itStatus : ${results}" th:text="${itStatus.count}"></th>
                 <th>Очки</th>
                 <th>КБ</th>

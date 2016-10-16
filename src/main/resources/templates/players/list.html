@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="base">
+<head>
+    <title>Список участников</title>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid">
+    <div id="tournamentTable" class="roundedPanel">
+        <table border="1" cellspacing="0" cellpadding="0" align="center">
+            <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.entity.Player>"*/-->
+            <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="player, itStatus1 : ${players}">
+                <td th:text="${itStatus1.count}"></td>
+                <td th:text="${player.firstName}"></td>
+                <td th:text="${player.secondName}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

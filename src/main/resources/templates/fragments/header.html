@@ -13,12 +13,6 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
             <a class="navbar-brand" href="#">Шахматный турнир</a>
         </div>
         <div class="navbar-collapse collapse">
@@ -30,8 +24,9 @@
                         Турнир <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" th:href="@{/tournament/table/}">Турнирная таблица</a></li>
                         <li><a href="#" th:href="@{/tournament/schedule/}">Расписание</a></li>
+                        <li><a href="#" th:href="@{/tournament/table/}">Турнирная таблица</a></li>
+                        <li th:if="${@authService.admin or @authService.staff}"><a th:href="@{/staff/register/game/}">Зарегистрировать игру</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -40,8 +35,7 @@
                         Участники <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li th:if="${@authService.staff}"><a th:href="@{/staff/register}">Регистрация</a>
-                        </li>
+                        <li th:if="${@authService.admin or @authService.staff}"><a th:href="@{/staff/register/player/}">Регистрация</a></li>
                         <li><a th:href="@{/players/}">Список</a></li>
                     </ul>
                 </li>

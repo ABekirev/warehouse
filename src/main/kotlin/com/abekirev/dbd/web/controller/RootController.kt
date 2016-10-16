@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView
 
 @Controller
 @RequestMapping("/")
-open class RootController {
+class RootController {
     @RequestMapping("/")
     fun root(): ModelAndView {
         return ModelAndView(REDIRECT + "/home/")

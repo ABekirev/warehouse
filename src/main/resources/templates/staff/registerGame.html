@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="base">
+<head>
+    <title>Регистрация игры</title>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid">
+    <div class="text-center roundedPanel">
+        <p class="error" th:if="${error != null}" th:text="${error}"></p>
+        <p th:if="${success != null}">Результат был успешно сохранен</p>
+        <form th:action="@{/staff/register/game/}" method="post">
+            <table class="whiteBorderedTable">
+                <!--/*@thymesVar id="results" type="java.util.Collection<abekirev.dbd.web.controller.TournamentController.ResultRow>"*/-->
+                <thead>
+                <tr>
+                    <th>Белые</th>
+                    <th>Черные</th>
+                    <th>Результат</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <select name="whitePlayerId">
+                            <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.StaffController.Player>"*/-->
+                            <option th:each="player, itStatus : ${players}" th:value="${player.id}"
+                                    th:text="${player.firstName + ' ' + player.secondName}"
+                                    th:selected="${itStatus.first}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="blackPlayerId">
+                            <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.StaffController.Player>"*/-->
+                            <option th:each="player, itStatus : ${players}" th:value="${player.id}"
+                                    th:text="${player.firstName + ' ' + player.secondName}"
+                                    th:selected="${itStatus.first}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="result">
+                            <option value="white">Белые выиграли</option>
+                            <option value="black">Черные выиграли</option>
+                            <option value="draw">Ничья</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="submitButton"><input type="submit" value="Зарегистрировать"/></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

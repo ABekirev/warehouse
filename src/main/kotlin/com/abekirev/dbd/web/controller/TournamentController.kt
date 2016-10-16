@@ -22,7 +22,10 @@ class TournamentController @Autowired constructor(private val playerService: Pla
     @RequestMapping("table/", method = arrayOf(RequestMethod.GET))
     fun table(modelMap: ModelMap): String {
         val players = playerService.getAll()
-        val bergerCoefByPlayer = players.map { it.id to it.bergerCoef(players) }.toMap()
+        val bergerCoefByPlayer = players
+                .map { player ->
+                    player.id to player.bergerCoef(players)
+                }.toMap()
         val sortedPlayers = players
                 .sortedWith(Comparator { p1, p2 -> -bergerCoefByPlayer[p1.id]!!.compareTo(bergerCoefByPlayer[p2.id]!!) })
                 .map(Player::id)

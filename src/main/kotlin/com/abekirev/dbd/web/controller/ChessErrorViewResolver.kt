@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
 
-//@Component
+@Component
 class ChessErrorViewResolver(
         applicationContext: ApplicationContext?,
         resourceProperties: ResourceProperties?) : DefaultErrorViewResolver(applicationContext, resourceProperties) {

@@ -28,15 +28,47 @@ body {
     color: white;
     background-color: rgba(0,0,0,0.9);
     border-radius: 15px;
+    padding: 10px;
 }
 
-#signInButton {
-    margin-top: 5px;
-    padding-bottom: 5px;
+.roundedPanel button {
     color: black;
 }
 
-#greetings {
+.roundedPanel select {
+    color: black;
+}
+
+.roundedPanel input {
+    color: black;
+}
+
+.roundedPanel table {
+    margin: auto;
+}
+
+.roundedPanel table th {
+    text-align: center;
+}
+
+.whiteBorderedTable {
+    border: 2px solid white;
+    border-collapse: collapse;
+}
+
+.whiteBorderedTable td {
+    border: 1px solid white;
+}
+
+.whiteBorderedTable th {
+    border: 1px solid white;
+}
+
+.submitButton {
+    padding: 5px;
+}
+
+.singleLineText {
     margin-top: 10px;
 }
 
@@ -46,11 +78,6 @@ body {
     padding: 10px;
 }
 
-#tournamentTable table {
-    border: solid white;
-    text-align: center;
-}
-
-#tournamentTable table th {
-    text-align: center;
+.error {
+    color: red;
 }

@@ -23,9 +23,15 @@ fun Player.points(): Double {
 }
 
 sealed class PlayerGameResult {
-    class Won : PlayerGameResult()
-    class Lost : PlayerGameResult()
-    class Draw : PlayerGameResult()
+    class Won : PlayerGameResult() {
+        override fun toString() = "Won"
+    }
+    class Lost : PlayerGameResult() {
+        override fun toString() = "Lost"
+    }
+    class Draw : PlayerGameResult() {
+        override fun toString() = "Draw"
+    }
 }
 
 fun Player.gameResult(game: Game): PlayerGameResult {
@@ -45,7 +51,7 @@ fun Player.points(game: Game): Double {
 }
 
 fun Player.otherPlayer(game: Game): Player {
-    return if (isWhite(game)) game.whitePlayer else game.blackPlayer
+    return if (isWhite(game)) game.blackPlayer else game.whitePlayer
 }
 
 fun Player.bergerCoef(players: Collection<Player>): Double {
