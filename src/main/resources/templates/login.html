@@ -8,21 +8,21 @@
 <body>
 <div layout:fragment="content">
     <div id="login" class="text-center roundedPanel">
-        <h1>Вход</h1>
+        <h1 th:text="#{login.formTitle}">Вход</h1>
         <form th:action="@{/login}" method="post">
             <table>
                 <tbody>
                     <tr>
-                        <td><label> Имя пользователя :</label></td>
-                        <td><input type="text" name="username"/></td>
+                        <td><label th:text="#{login.username}">Имя пользователя</label></td>
+                        <td><input type="text" name="username" tabindex="1"/></td>
                     </tr>
                     <tr>
-                        <td><label> Пароль :</label></td>
-                        <td><input type="password" name="password"/></td>
+                        <td><label th:text="#{login.password}">Пароль</label></td>
+                        <td><input type="password" name="password" tabindex="2"/></td>
                     </tr>
                 </tbody>
             </table>
-            <div class="submitButton"><input type="submit" value="Войти"/></div>
+            <div class="submitButton"><input type="submit" th:value="#{login.button}" value="Войти"/></div>
         </form>
     </div>
 </div>

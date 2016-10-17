@@ -17,10 +17,7 @@ body {
 #login table {
     display: inline;
     border-collapse: separate;
-    border-spacing: 2px;
-}
-
-#login table {
+    border-spacing: 5px;
     text-align: left;
 }
 
@@ -80,4 +77,9 @@ body {
 
 .error {
     color: red;
+}
+
+#gameRegistration table {
+    border-collapse: separate;
+    border-spacing: 5px;
 }

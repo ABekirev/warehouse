@@ -12,12 +12,12 @@
             <!--/*@thymesVar id="results" type="java.util.Collection<abekirev.dbd.web.controller.TournamentController.ResultRow>"*/-->
             <thead>
             <tr>
-                <th>Номер</th>
-                <th>Фамилия Имя</th>
+                <th th:text="#{tournament.table.number}">№</th>
+                <th th:text="#{tournament.table.name}">Фамилия Имя</th>
                 <th th:each="result, itStatus : ${results}" th:text="${itStatus.count}"></th>
-                <th>Очки</th>
-                <th>КБ</th>
-                <th>Место</th>
+                <th th:text="#{tournament.table.points}">Очки</th>
+                <th th:text="#{tournament.table.bergerCoef}">КБ</th>
+                <th th:text="#{tournament.table.place}">Место</th>
             </tr>
             </thead>
             <tbody>

@@ -7,48 +7,51 @@
 </head>
 <body>
 <div layout:fragment="content" class="container-fluid">
-    <div class="text-center roundedPanel">
+    <div id="gameRegistration" class="text-center roundedPanel">
         <p class="error" th:if="${error != null}" th:text="${error}"></p>
-        <p th:if="${success != null}">Результат был успешно сохранен</p>
-        <form th:action="@{/staff/register/game/}" method="post">
-            <table class="whiteBorderedTable">
-                <!--/*@thymesVar id="results" type="java.util.Collection<abekirev.dbd.web.controller.TournamentController.ResultRow>"*/-->
-                <thead>
-                <tr>
-                    <th>Белые</th>
-                    <th>Черные</th>
-                    <th>Результат</th>
-                </tr>
-                </thead>
+        <p th:if="${success != null}" th:text="${success}">Результат был успешно сохранен</p>
+        <!--/*@thymesVar id="gameRegistrationForm" type="com.abekirev.dbd.web.controller.staff.StaffController.GameRegistrationForm"*/-->
+        <form th:action="@{/staff/register/game/}" th:object="${gameRegistrationForm}" method="post">
+            <table>
                 <tbody>
                 <tr>
+                    <td th:text="#{staff.register.game.player.white}">Белые</td>
                     <td>
-                        <select name="whitePlayerId">
-                            <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.StaffController.Player>"*/-->
+                        <select th:field="*{whitePlayerId}">
+                            <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.staff.StaffController.Player>"*/-->
                             <option th:each="player, itStatus : ${players}" th:value="${player.id}"
                                     th:text="${player.firstName + ' ' + player.secondName}"
                                     th:selected="${itStatus.first}"></option>
                         </select>
                     </td>
+                    <td th:if="${#fields.hasErrors('whitePlayerId')}" th:errors="*{whitePlayerId}">White player id has errors</td>
+                </tr>
+                <tr>
+                    <td th:text="#{staff.register.game.player.black}">Черные</td>
                     <td>
-                        <select name="blackPlayerId">
-                            <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.StaffController.Player>"*/-->
+                        <select th:field="*{blackPlayerId}">
+                            <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.staff.StaffController.Player>"*/-->
                             <option th:each="player, itStatus : ${players}" th:value="${player.id}"
                                     th:text="${player.firstName + ' ' + player.secondName}"
                                     th:selected="${itStatus.first}"></option>
                         </select>
                     </td>
+                    <td th:if="${#fields.hasErrors('blackPlayerId')}" th:errors="*{blackPlayerId}">Black player id has errors</td>
+                </tr>
+                <tr>
+                    <td  th:text="#{staff.register.game.result}">Результат</td>
                     <td>
-                        <select name="result">
-                            <option value="white">Белые выиграли</option>
-                            <option value="black">Черные выиграли</option>
-                            <option value="draw">Ничья</option>
+                        <select th:field="*{result}">
+                            <option value="white" th:text="#{staff.register.game.result.black}">Белые выиграли</option>
+                            <option value="black" th:text="#{staff.register.game.result.white}">Черные выиграли</option>
+                            <option value="draw" th:text="#{staff.register.game.result.draw}">Ничья</option>
                         </select>
                     </td>
+                    <td th:if="${#fields.hasErrors('result')}" th:errors="*{result}">Result has errors</td>
                 </tr>
                 </tbody>
             </table>
-            <div class="submitButton"><input type="submit" value="Зарегистрировать"/></div>
+            <div class="submitButton"><input type="submit" th:value="#{staff.register.game.button}" value="Зарегистрировать"/></div>
         </form>
     </div>
 </div>

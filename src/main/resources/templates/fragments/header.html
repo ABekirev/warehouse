@@ -13,39 +13,37 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Шахматный турнир</a>
+            <a class="navbar-brand" href="#" th:text="#{header.brand}">Шахматный турнир</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="#" th:href="@{/}">Главная</a></li>
+                <li><a href="#" th:href="@{/}" th:text="#{header.menu.home}">Главная</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-haspopup="true" aria-expanded="false">
-                        Турнир <span class="caret"></span>
+                       aria-haspopup="true" aria-expanded="false" th:text="#{header.menu.tournament}">Турнир<span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" th:href="@{/tournament/schedule/}">Расписание</a></li>
-                        <li><a href="#" th:href="@{/tournament/table/}">Турнирная таблица</a></li>
-                        <li th:if="${@authService.admin or @authService.staff}"><a th:href="@{/staff/register/game/}">Зарегистрировать игру</a></li>
+                        <li><a href="#" th:href="@{/tournament/schedule/}" th:text="#{header.menu.tournament.schedule}">Расписание</a></li>
+                        <li><a href="#" th:href="@{/tournament/table/}" th:text="#{header.menu.tournament.table}">Турнирная таблица</a></li>
+                        <li th:if="${@authService.admin or @authService.staff}"><a th:href="@{/staff/register/game/}" th:text="#{header.menu.tournament.gameRegistration}">Регистрация игры</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-haspopup="true" aria-expanded="false">
-                        Участники <span class="caret"></span>
+                       aria-haspopup="true" aria-expanded="false" th:text="#{header.menu.players}">Участники<span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li th:if="${@authService.admin or @authService.staff}"><a th:href="@{/staff/register/player/}">Регистрация</a></li>
-                        <li><a th:href="@{/players/}">Список</a></li>
+                        <li th:if="${@authService.admin or @authService.staff}"><a th:href="@{/staff/register/player/}" th:text="#{header.menu.players.registration}">Регистрация</a></li>
+                        <li><a th:href="@{/players/}" th:text="#{header.menu.players.list}">Список</a></li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${@authService.anonymous}">
-                    <a href="/signin" th:href="@{/login}">Войти</a>
+                    <a href="/signin" th:href="@{/login}" th:text="#{header.login}">Войти</a>
                 </li>
                 <li th:if="${not @authService.anonymous}">
-                    <a href="/logout" th:href="@{/logout}">Выйти</a>
+                    <a href="/logout" th:href="@{/logout}" th:text="#{header.logout}">Выйти</a>
                 </li>
             </ul>
         </div>
