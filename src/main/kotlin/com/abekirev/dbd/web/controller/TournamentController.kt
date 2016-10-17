@@ -11,15 +11,15 @@ import com.abekirev.dbd.service.PlayerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
 import java.util.*
 
 @Controller
 @RequestMapping("/tournament/")
 class TournamentController @Autowired constructor(private val playerService: PlayerService) {
 
-    @RequestMapping("table/", method = arrayOf(RequestMethod.GET))
+    @GetMapping("table/")
     fun table(modelMap: ModelMap): String {
         val players = playerService.getAll()
         val bergerCoefByPlayer = players
@@ -53,7 +53,7 @@ class TournamentController @Autowired constructor(private val playerService: Pla
 
     class ResultRow(private val p: IPlayer, val gameResults: Map<String, String>, val points: Double, val bergerCoef: Double, val place: Int?) : IPlayer by p
 
-    @RequestMapping("schedule/", method = arrayOf(RequestMethod.GET))
+    @GetMapping("schedule/")
     fun schedule(modelMap: ModelMap): String {
         return "home"
     }

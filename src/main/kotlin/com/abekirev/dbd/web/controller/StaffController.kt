@@ -3,12 +3,13 @@ package com.abekirev.dbd.web.controller
 import com.abekirev.dbd.entity.Game
 import com.abekirev.dbd.entity.GameResult
 import com.abekirev.dbd.entity.Player
-import com.abekirev.dbd.entity.isWhite
 import com.abekirev.dbd.entity.otherPlayer
 import com.abekirev.dbd.service.PlayerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.ui.ModelMap
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
@@ -29,13 +30,13 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
         put("players", playerService.getAll().map { Player(it.id, it.firstName, it.secondName) })
     }
 
-    @RequestMapping("register/game/", method = arrayOf(RequestMethod.GET))
+    @GetMapping("register/game/")
     fun registerGame(modelMap: ModelMap): String {
         modelMap.fillMapWithPlayers()
         return registerGameViewName
     }
 
-    @RequestMapping("register/game/", method = arrayOf(RequestMethod.POST))
+    @PostMapping("register/game/")
     fun registerGameAction(
             @RequestParam("whitePlayerId") whitePlayerId: String?,
             @RequestParam("blackPlayerId") blackPlayerId: String?,
