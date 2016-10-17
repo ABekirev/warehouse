@@ -11,13 +11,12 @@ import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 
 @Component
 @RequestMapping("/staff/")
 class StaffController @Autowired constructor(private val playerService: PlayerService) {
-    @RequestMapping("register/player/", method = arrayOf(RequestMethod.GET))
+    @GetMapping("register/player/")
     fun registerPlayer(): String {
         return "home"
     }
