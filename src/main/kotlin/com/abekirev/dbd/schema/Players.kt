@@ -8,7 +8,7 @@ import kotlinx.nosql.string
 object Players : DocumentSchema<PlayerDto>("players", PlayerDto::class) {
     val _id = string("_id")
     val firstName = string("firstName")
-    val secondName = string("secondName")
+    val lastName = string("lastName")
     val games = GameColumn()
 
     class GameColumn : ListColumn<GameDto, Players>("games", GameDto::class) {
@@ -19,14 +19,14 @@ object Players : DocumentSchema<PlayerDto>("players", PlayerDto::class) {
         class OpponentColumn : Column<OpponentDto, Players>("opponent", OpponentDto::class) {
             val _id = string("_id")
             val firstName = string("firstName")
-            val secondName = string("secondName")
+            val secondName = string("lastName")
         }
     }
 }
 
 data class PlayerDto(val _id: String,
                      val firstName: String,
-                     val secondName: String,
+                     val lastName: String,
                      val games: List<GameDto>)
 
 data class OpponentDto(val _id: String,

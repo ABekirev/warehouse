@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="base">
+<head>
+    <title>Регистрация игрока</title>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid">
+    <div id="playerRegistration" class="text-center roundedPanel">
+        <p class="error" th:if="${error != null}" th:text="${error}"></p>
+        <p th:if="${success != null}" th:text="${success}">Игрок успешно зарегистрирован</p>
+        <!--/*@thymesVar id="gameRegistrationForm" type="com.abekirev.dbd.web.controller.staff.StaffController.GameRegistrationForm"*/-->
+        <form th:action="@{/staff/register/player/}" th:object="${playerRegistrationForm}" method="post">
+            <table>
+                <tbody>
+                <tr>
+                    <td th:text="#{staff.register.player.firstName}">Имя</td>
+                    <td><input type="text" th:field="*{firstName}" tabindex="1"/></td>
+                    <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name has errors</td>
+                </tr>
+                <tr>
+                    <td th:text="#{staff.register.player.lastName}">Фамилия</td>
+                    <td><input type="text" th:field="*{lastName}" tabindex="2"/></td>
+                    <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name has errors</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="submitButton"><input type="submit" th:value="#{staff.register.player.button}" value="Зарегистрировать"/></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

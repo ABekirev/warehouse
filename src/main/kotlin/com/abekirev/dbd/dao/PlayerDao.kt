@@ -35,8 +35,15 @@ class PlayerDao(private val db: MongoDB) {
         val playerDto = playerToPlayerDto(player)
         db.withSession {
             Players.find({ Players._id.equal(playerDto._id) })
-                    .projection { _id + firstName + secondName + games }
-                    .update(playerDto._id, playerDto.firstName, playerDto.secondName, playerDto.games)
+                    .projection { _id + firstName + lastName + games }
+                    .update(playerDto._id, playerDto.firstName, playerDto.lastName, playerDto.games)
+        }
+    }
+
+    fun create(player: Player) {
+        val playerDto = playerToPlayerDto(player)
+        db.withSession {
+            Players.insert(playerDto)
         }
     }
 
@@ -44,7 +51,7 @@ class PlayerDao(private val db: MongoDB) {
         return Player(
                 playerDto._id,
                 playerDto.firstName,
-                playerDto.secondName,
+                playerDto.lastName,
                 playerDto.games.map { gameDtoToGame(playerDto, it) }
         )
     }
@@ -102,7 +109,7 @@ class PlayerDao(private val db: MongoDB) {
         return Player(
                 playerDto._id,
                 playerDto.firstName,
-                playerDto.secondName,
+                playerDto.lastName,
                 emptySet()
         )
     }
@@ -120,7 +127,7 @@ class PlayerDao(private val db: MongoDB) {
         return PlayerDto(
                 player.id,
                 player.firstName,
-                player.secondName,
+                player.lastName,
                 player.games.map { gameToGameDto(player, it) }
         )
     }
@@ -141,7 +148,7 @@ class PlayerDao(private val db: MongoDB) {
         return OpponentDto(
                 player.id,
                 player.firstName,
-                player.secondName
+                player.lastName
         )
     }
 }

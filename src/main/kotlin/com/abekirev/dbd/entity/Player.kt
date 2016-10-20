@@ -3,13 +3,13 @@ package com.abekirev.dbd.entity
 interface IPlayer {
     val id: String
     val firstName: String
-    val secondName: String
+    val lastName: String
     val games: Collection<Game>
 }
 
 data class Player(override val id: String,
                   override val firstName: String,
-                  override val secondName: String,
+                  override val lastName: String,
                   override val games: Collection<Game>) : IPlayer
 
 fun Player.isWhite(game: Game): Boolean {

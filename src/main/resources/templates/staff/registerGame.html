@@ -20,7 +20,7 @@
                         <select th:field="*{whitePlayerId}">
                             <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.staff.StaffController.Player>"*/-->
                             <option th:each="player, itStatus : ${players}" th:value="${player.id}"
-                                    th:text="${player.firstName + ' ' + player.secondName}"
+                                    th:text="${player.firstName + ' ' + player.lastName}"
                                     th:selected="${itStatus.first}"></option>
                         </select>
                     </td>
@@ -32,7 +32,7 @@
                         <select th:field="*{blackPlayerId}">
                             <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.staff.StaffController.Player>"*/-->
                             <option th:each="player, itStatus : ${players}" th:value="${player.id}"
-                                    th:text="${player.firstName + ' ' + player.secondName}"
+                                    th:text="${player.firstName + ' ' + player.lastName}"
                                     th:selected="${itStatus.first}"></option>
                         </select>
                     </td>

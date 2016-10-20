@@ -24,17 +24,34 @@ import javax.validation.Valid
 @RequestMapping("/staff/")
 class StaffController @Autowired constructor(private val playerService: PlayerService,
                                              private val localizedMessageSource: LocalizedMessageSource) {
-    @GetMapping("register/player/")
-    fun registerPlayer(): String {
-        return "home"
-    }
 
+    private val playerRegistrationViewName = "staff/registerPlayer"
     private val gameRegistrationViewName = "staff/registerGame"
 
-    class Player(val id: String, val firstName: String, val secondName: String)
+    @GetMapping("register/player/")
+    fun registerPlayer(playerRegistrationForm: PlayerRegistrationForm): String {
+        return playerRegistrationViewName
+    }
+
+
+    @PostMapping("register/player/")
+    fun registerPlayerAction(
+            @Valid playerRegistrationForm: PlayerRegistrationForm,
+            bindingResult: BindingResult,
+            modelMap: ModelMap
+    ): String {
+        if (!bindingResult.hasErrors()) {
+            playerService.create(playerRegistrationForm.firstName!!, playerRegistrationForm.lastName!!)
+            modelMap.addAttribute("success", localizedMessageSource.getMessage("staff.register.player.success"))
+            playerRegistrationForm.clear()
+        }
+        return playerRegistrationViewName
+    }
+
+    class Player(val id: String, val firstName: String, val lastName: String)
 
     fun ModelMap.fillMapWithPlayers() {
-        put("players", playerService.getAll().map { Player(it.id, it.firstName, it.secondName) })
+        put("players", playerService.getAll().map { Player(it.id, it.firstName, it.lastName) })
     }
 
     @GetMapping("register/game/")
@@ -42,7 +59,6 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
                      modelMap: ModelMap): String {
         modelMap.fillMapWithPlayers()
         return gameRegistrationViewName
-
     }
 
     @PostMapping("register/game/")
@@ -82,7 +98,7 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
                                 playerService.update(Player(
                                         whitePlayer.id,
                                         whitePlayer.firstName,
-                                        whitePlayer.secondName,
+                                        whitePlayer.lastName,
                                         whitePlayer.games.filter { game ->
                                             whitePlayer.otherPlayer(game).id != blackPlayer.id
                                         }.plus(game)
@@ -90,7 +106,7 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
                                 playerService.update(Player(
                                         blackPlayer.id,
                                         blackPlayer.firstName,
-                                        blackPlayer.secondName,
+                                        blackPlayer.lastName,
                                         blackPlayer.games.filter { game ->
                                             blackPlayer.otherPlayer(game).id != whitePlayer.id
                                         }.plus(game)
