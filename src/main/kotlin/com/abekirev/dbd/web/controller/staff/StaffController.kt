@@ -7,7 +7,7 @@ import com.abekirev.dbd.entity.GameResult.WhiteWon
 import com.abekirev.dbd.entity.Player
 import com.abekirev.dbd.entity.otherPlayer
 import com.abekirev.dbd.service.PlayerService
-import com.abekirev.dbd.web.controller.LocalizedMessageSource
+import com.abekirev.dbd.web.LocalizedMessageSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -32,7 +32,6 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
     fun registerPlayer(playerRegistrationForm: PlayerRegistrationForm): String {
         return playerRegistrationViewName
     }
-
 
     @PostMapping("register/player/")
     fun registerPlayerAction(

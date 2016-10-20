@@ -1,4 +1,4 @@
-package com.abekirev.dbd.web.controller
+package com.abekirev.dbd.web
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource

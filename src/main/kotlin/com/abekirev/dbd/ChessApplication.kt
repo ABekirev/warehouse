@@ -14,6 +14,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 
+fun main(args: Array<String>) {
+    SpringApplication.run(ChessApplication::class.java, *args)
+}
+
 @SpringBootApplication
 open class ChessApplication {
     @Bean open fun kotlinPropertyConfigurer() : PropertySourcesPlaceholderConfigurer {
@@ -52,8 +56,4 @@ open class ChessApplication {
     @Bean open fun playerService(playerDao: PlayerDao): PlayerService {
         return PlayerService(playerDao)
     }
-}
-
-fun main(args: Array<String>) {
-    SpringApplication.run(ChessApplication::class.java, *args)
 }
