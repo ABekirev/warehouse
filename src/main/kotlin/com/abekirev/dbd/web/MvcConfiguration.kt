@@ -1,6 +1,5 @@
 package com.abekirev.dbd.web
 
-import com.abekirev.dbd.web.controller.resourcePath
 import nz.net.ultraq.thymeleaf.LayoutDialect
 import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Bean
@@ -11,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.thymeleaf.dialect.IDialect
+import java.nio.file.Paths
 
 @Configuration
 @EnableWebMvc
@@ -37,7 +37,7 @@ open class MvcConfiguration {
 
     @Bean open fun messageSource(): MessageSource {
         return ResourceBundleMessageSource().apply {
-            setBasename("locale".resourcePath("messages").resourcePath("messages"))
+            setBasename(Paths.get("locale", "messages", "messages").toString())
         }
     }
 }
