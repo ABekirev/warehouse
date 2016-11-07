@@ -19,7 +19,9 @@
 <div>
     <div class="container">
         <div th:replace="fragments/header :: header">&nbsp;</div>
-        <div layout:fragment="content"></div>
+        <div class="roundedPanel col-md-12">
+            <div layout:fragment="content"></div>
+        </div>
     </div>
 </div>
 </body>

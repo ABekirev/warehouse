@@ -3,7 +3,8 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" th:href="@{/static/bootstrap/css/bootstrap.min.css}"
+    <link rel="stylesheet"
+          th:href="@{/static/bootstrap/css/bootstrap.min.css}"
           href="/static/bootstrap/css/bootstrap.css"/>
     <script th:src="@{/static/bootstrap/js/bootstrap.min.js}"
             src="/static/bootstrap/js/bootstrap.js"></script>
@@ -17,26 +18,8 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="#" th:href="@{/}" th:text="#{header.menu.home}">Главная</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-haspopup="true" aria-expanded="false" th:text="#{header.menu.tournament}">Турнир<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" th:href="@{/tournament/schedule/}" th:text="#{header.menu.tournament.schedule}">Расписание</a></li>
-                        <li><a href="#" th:href="@{/tournament/table/}" th:text="#{header.menu.tournament.table}">Турнирная таблица</a></li>
-                        <li th:if="${@authService.admin or @authService.staff}"><a th:href="@{/staff/register/game/}" th:text="#{header.menu.tournament.gameRegistration}">Регистрация игры</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-haspopup="true" aria-expanded="false" th:text="#{header.menu.players}">Участники<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li th:if="${@authService.admin or @authService.staff}"><a th:href="@{/staff/register/player/}" th:text="#{header.menu.players.registration}">Регистрация</a></li>
-                        <li><a th:href="@{/players/}" th:text="#{header.menu.players.list}">Список</a></li>
-                    </ul>
-                </li>
+                <li><a href="#" th:href="@{/tournament/list/}" th:text="#{header.menu.tournaments}">Турниры</a></li>
+                <li><a href="#" th:href="@{/players/}" th:text="#{header.menu.players}">Участники</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${@authService.anonymous}">

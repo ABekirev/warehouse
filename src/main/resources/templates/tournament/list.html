@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="tournament/tournamentsBase">
+<head>
+    <title>Список участников</title>
+</head>
+<body>
+<div layout:fragment="tournamentsContent">
+    <table class="roundedPanelTable" border="1" cellspacing="0" cellpadding="0" align="center">
+        <!--/*@thymesVar id="tournaments" type="java.util.Collection<com.abekirev.dbd.entity.Tournament>"*/-->
+        <thead>
+        <tr>
+            <th th:text="#{tournament.name}">Название</th>
+            <th th:text="#{tournament.dateFrom}">Дата открытия</th>
+            <th th:text="#{tournament.dateTo}">Дата закрытия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="t, itStatus : ${tournaments}">
+            <td><a th:href="${'/tournament/?id=' + t.id}" th:text="${t.name}"></a></td>
+            <td th:text="${t.dateFrom}"></td>
+            <td th:text="${t.dateTo}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

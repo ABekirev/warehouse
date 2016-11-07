@@ -1,7 +1,10 @@
 package com.abekirev.dbd.entity
 
-data class Game(val whitePlayer: Player,
-                val blackPlayer: Player,
+data class Game(val id: String?,
+                val tournamentId: String,
+                val tournamentName: String,
+                val whitePlayer: GamePlayer,
+                val blackPlayer: GamePlayer,
                 val result: GameResult)
 
 sealed class GameResult {
@@ -15,3 +18,8 @@ sealed class GameResult {
         override fun toString() = "Draw"
     }
 }
+
+data class GamePlayer(val id: String,
+                      val firstName: String,
+                      val lastName: String)
+

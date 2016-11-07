@@ -14,7 +14,7 @@ import java.nio.file.Paths
 
 @Configuration
 @EnableWebMvc
-open class MvcConfiguration {
+open class WebConfiguration {
 
     private class WarehouseWebMvcConfigurer : WebMvcConfigurerAdapter() {
         override fun addResourceHandlers(registry: ResourceHandlerRegistry?) {

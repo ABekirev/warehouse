@@ -1,0 +1,8 @@
+package com.abekirev.dbd
+
+import java.util.stream.Collectors
+import java.util.stream.Stream
+
+fun <T> Stream<T>.toList(): List<T> {
+    return collect(Collectors.toList())
+}

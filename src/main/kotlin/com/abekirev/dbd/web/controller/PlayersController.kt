@@ -15,7 +15,7 @@ class PlayersController @Autowired constructor(private val playerService: Player
     fun players(modelMap: ModelMap): String {
         modelMap.addAttribute(
                 "players",
-                playerService.getAll().sortedWith(Comparator { p1, p2 ->
+                playerService.getAllProjections().sortedWith(Comparator { p1, p2 ->
                     (p1.firstName + p1.lastName).compareTo(p2.firstName + p2.lastName)
                 })
         )

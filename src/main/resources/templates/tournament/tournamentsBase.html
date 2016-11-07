@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="base">
+<head>
+    <title>Список участников</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <nav id="sidebar" class="col-md-2">
+        <ul>
+            <li><a href="#" th:href="@{/tournament/list/}" th:text="#{tournament.sidemenu.list}">Список</a></li>
+            <li><a href="#" th:href="@{/staff/tournament/create/}" th:text="#{tournament.sidemenu.create}">Создание турнира</a></li>
+        </ul>
+    </nav>
+    <div class="container-fluid col-md-10">
+        <div layout:fragment="tournamentsContent"></div>
+    </div>
+</div>
+</body>
+</html>
