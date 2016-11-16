@@ -3,6 +3,7 @@ package com.abekirev.dbd.dal
 import com.abekirev.dbd.dal.dao.PlayerDao
 import com.abekirev.dbd.dal.dao.TournamentDao
 import com.abekirev.dbd.dal.dao.UserDao
+import com.abekirev.dbd.dal.repository.PlayerProjectionRepository
 import com.abekirev.dbd.dal.repository.PlayerRepository
 import com.abekirev.dbd.dal.repository.TournamentRepository
 import com.abekirev.dbd.dal.repository.UserRepository
@@ -25,8 +26,9 @@ open class DalConfiguration {
         return UserDao(userRepository)
     }
 
-    @Bean open fun playerDao(playerRepository: PlayerRepository): PlayerDao {
-        return PlayerDao(playerRepository)
+    @Bean open fun playerDao(playerRepository: PlayerRepository,
+                             playerProjectionRepository: PlayerProjectionRepository): PlayerDao {
+        return PlayerDao(playerRepository, playerProjectionRepository)
     }
 
     @Bean open fun tournamentDao(tournamentRepository: TournamentRepository): TournamentDao {

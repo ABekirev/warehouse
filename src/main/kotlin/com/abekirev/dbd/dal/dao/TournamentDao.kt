@@ -12,27 +12,22 @@ import com.abekirev.dbd.entity.Schedule
 import com.abekirev.dbd.entity.Tournament
 import com.abekirev.dbd.entity.TournamentGame
 import com.abekirev.dbd.entity.TournamentPlayer
+import java.util.stream.Stream
 
 class TournamentDao(private val tournamentRepository: TournamentRepository) {
-    fun getAll(): Collection<Tournament> {
-        return tournamentRepository.findAll().map(::tournamentDtoToTournament)
-    }
+    fun getAll(): Stream<Tournament> = tournamentRepository.findAll()
+            .map(::tournamentDtoToTournament)
 
-    fun get(id: String): Tournament? {
-        return tournamentRepository.findOne(id).let(::tournamentDtoToTournament)
-    }
+    fun get(id: String) = tournamentRepository.findOne(id)
+            .thenApplyAsync { it?.let(::tournamentDtoToTournament) }
 
-    fun create(tournament: Tournament): String {
-        return tournamentRepository.save(tournamentToTournamentDto(tournament)).id!!
-    }
+    fun create(tournament: Tournament) = tournamentRepository.save(tournamentToTournamentDto(tournament))
+            .thenApplyAsync(::tournamentDtoToTournament)
 
-    fun update(tournament: Tournament) {
-        tournamentRepository.save(tournamentToTournamentDto(tournament))
-    }
+    fun update(tournament: Tournament) = tournamentRepository.save(tournamentToTournamentDto(tournament))
+            .thenApplyAsync(::tournamentDtoToTournament)
 
-    fun delete(id: String) {
-        tournamentRepository.delete(id)
-    }
+    fun delete(id: String) = tournamentRepository.delete(id)
 }
 
 internal fun tournamentDtoToTournament(tournament: TournamentDto): Tournament {
@@ -69,7 +64,7 @@ internal fun tournamentGameDtoToTournamentGame(game: TournamentGameDto): Tournam
             game.id!!,
             game.whitePlayer?.let(::tournamentPlayerDtoToTournamentPlayer) ?: throw IllegalArgumentException(),
             game.blackPlayer?.let(::tournamentPlayerDtoToTournamentPlayer) ?: throw IllegalArgumentException(),
-            game.result?.let{ result ->
+            game.result?.let { result ->
                 when (result) {
                     GameResult.WhiteWon().dbValue -> WhiteWon()
                     GameResult.BlackWon().dbValue -> BlackWon()

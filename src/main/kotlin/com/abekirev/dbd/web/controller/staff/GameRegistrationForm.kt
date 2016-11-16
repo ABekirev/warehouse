@@ -6,6 +6,9 @@ import javax.validation.constraints.Pattern.Flag.CASE_INSENSITIVE
 
 class GameRegistrationForm {
     @NotNull
+    var tournamentId: String? = null
+
+    @NotNull
     var whitePlayerId: String? = null
 
     @NotNull

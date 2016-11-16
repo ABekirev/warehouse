@@ -6,21 +6,16 @@ import com.abekirev.dbd.entity.Authority
 import com.abekirev.dbd.entity.User
 
 class UserDao(private val userRepository: UserRepository) {
-    fun getByName(name: String): User? {
-        return userRepository.findByName(name).map(::userDtoToUser).orElse(null)
-    }
+    fun getByName(name: String) = userRepository.findByName(name)
+            .thenApplyAsync { it?.let(::userDtoToUser) }
 
-    fun create(user: User): String {
-        return userRepository.save(userToUserDto(user)).id!!
-    }
+    fun create(user: User) = userRepository.save(userToUserDto(user))
+            .thenApplyAsync(::userDtoToUser)
 
-    fun update(user: User) {
-        userRepository.save(userToUserDto(user))
-    }
+    fun update(user: User) = userRepository.save(userToUserDto(user))
+            .thenApplyAsync(::userDtoToUser)
 
-    fun delete(id: String) {
-        return userRepository.delete(id)
-    }
+    fun delete(id: String) = userRepository.delete(id)
 }
 
 internal fun userDtoToUser(user: UserDto): User {
@@ -30,7 +25,7 @@ internal fun userDtoToUser(user: UserDto): User {
             user.credentialsNonExpired ?: false,
             user.accountNonExpired ?: false,
             user.accountNonLocked ?: false,
-            user.authoritiesCollection?.map{ Authority.invoke(it) ?: throw IllegalArgumentException() } ?: emptySet(),
+            user.authoritiesCollection?.map { Authority.invoke(it) ?: throw IllegalArgumentException() } ?: emptySet(),
             user.enabled ?: false,
             user.pass!!
     )
@@ -43,7 +38,7 @@ internal fun userToUserDto(user: User): UserDto {
             user.credentialsNonExpired,
             user.accountNonExpired,
             user.accountNonLocked,
-            user.authoritiesCollection.map{ it.authority },
+            user.authoritiesCollection.map { it.authority },
             user.enabled,
             user.pass
     )

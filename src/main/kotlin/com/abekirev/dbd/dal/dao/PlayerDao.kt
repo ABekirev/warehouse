@@ -3,6 +3,7 @@ package com.abekirev.dbd.dal.dao
 import com.abekirev.dbd.dal.entity.OpponentDto
 import com.abekirev.dbd.dal.entity.PlayerDto
 import com.abekirev.dbd.dal.entity.PlayerGameDto
+import com.abekirev.dbd.dal.repository.PlayerProjectionRepository
 import com.abekirev.dbd.dal.repository.PlayerRepository
 import com.abekirev.dbd.entity.Opponent
 import com.abekirev.dbd.entity.Player
@@ -12,32 +13,26 @@ import com.abekirev.dbd.entity.PlayerGameResult.Lost
 import com.abekirev.dbd.entity.PlayerGameResult.Won
 import com.abekirev.dbd.entity.PlayerGameSide.Black
 import com.abekirev.dbd.entity.PlayerGameSide.White
-import com.abekirev.dbd.toList
+import java.util.stream.Stream
 
-class PlayerDao(private val playerRepository: PlayerRepository) {
-    fun getAll(): Collection<Player> {
-        return playerRepository.findAll().map(::playerDtoToPlayer)
-    }
+class PlayerDao(private val playerRepository: PlayerRepository,
+                private val playerProjectionRepository: PlayerProjectionRepository) {
+    fun getAll(): Stream<Player> = playerRepository.findAll()
+            .map(::playerDtoToPlayer)
 
-    fun getAllProjections(): Collection<Player> {
-        return playerRepository.findAllProjections().map(::playerDtoToPlayer).toList()
-    }
+    fun getAllProjections(): Stream<Player> = playerProjectionRepository.findAll()
+            .map(::playerDtoToPlayer)
 
-    fun get(id: String): Player? {
-        return playerRepository.findById(id).map(::playerDtoToPlayer).orElse(null)
-    }
+    fun get(id: String) = playerRepository.findOne(id)
+            .thenApplyAsync { it?.let(::playerDtoToPlayer) }
 
-    fun create(player: Player): String {
-        return playerRepository.save(playerToPlayerDto(player)).id!!
-    }
+    fun create(player: Player) = playerRepository.save(playerToPlayerDto(player))
+            .thenApplyAsync(::playerDtoToPlayer)
 
-    fun update(player: Player) {
-        playerRepository.save(playerToPlayerDto(player))
-    }
+    fun update(player: Player) = playerRepository.save(playerToPlayerDto(player))
+            .thenApplyAsync(::playerDtoToPlayer)
 
-    fun delete(id: String) {
-        return playerRepository.delete(id)
-    }
+    fun delete(id: String) = playerRepository.delete(id)
 }
 
 internal sealed class PlayerSide(val dbValue: String) {

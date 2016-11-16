@@ -7,13 +7,11 @@ import com.abekirev.dbd.entity.Game
 import com.abekirev.dbd.entity.GamePlayer
 
 class GameDao(private val gameRepository: GameRepository) {
-    fun get(id: String): Game? {
-        return gameRepository.findOne(id)?.let(::gameDtoToGame)
-    }
+    fun get(id: String) = gameRepository.findOne(id)
+            .thenApplyAsync { it?.let(::gameDtoToGame) }
 
-    fun create(game: Game): String {
-        return gameRepository.save(gameToGameDto(game)).id!!
-    }
+    fun create(game: Game) = gameRepository.save(gameToGameDto(game))
+            .thenApplyAsync(::gameDtoToGame)
 }
 
 internal sealed class GameResult(val dbValue: String) {
@@ -29,7 +27,7 @@ internal fun gameDtoToGame(game: GameDto): Game {
             game.tournamentName!!,
             game.whitePlayer?.let(::gamePlayerDtoToGamePlayer) ?: throw IllegalArgumentException(),
             game.blackPlayer?.let(::gamePlayerDtoToGamePlayer) ?: throw IllegalArgumentException(),
-            game.result?.let{ result ->
+            game.result?.let { result ->
                 when (result) {
                     GameResult.WhiteWon().dbValue -> com.abekirev.dbd.entity.GameResult.WhiteWon()
                     GameResult.BlackWon().dbValue -> com.abekirev.dbd.entity.GameResult.BlackWon()
@@ -54,7 +52,7 @@ internal fun gameToGameDto(game: Game): GameDto {
             game.tournamentId,
             gamePlayerToGamePlayerDto(game.whitePlayer),
             gamePlayerToGamePlayerDto(game.blackPlayer),
-            when (game.result){
+            when (game.result) {
                 is com.abekirev.dbd.entity.GameResult.WhiteWon -> GameResult.WhiteWon().dbValue
                 is com.abekirev.dbd.entity.GameResult.BlackWon -> GameResult.BlackWon().dbValue
                 is com.abekirev.dbd.entity.GameResult.Draw -> GameResult.Draw().dbValue

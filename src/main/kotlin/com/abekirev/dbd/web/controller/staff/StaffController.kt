@@ -1,13 +1,16 @@
 package com.abekirev.dbd.web.controller.staff
 
 import com.abekirev.dbd.entity.Game
+import com.abekirev.dbd.entity.GamePlayer
 import com.abekirev.dbd.entity.GameResult.BlackWon
 import com.abekirev.dbd.entity.GameResult.Draw
 import com.abekirev.dbd.entity.GameResult.WhiteWon
 import com.abekirev.dbd.entity.Player
 import com.abekirev.dbd.entity.PlayerGame
+import com.abekirev.dbd.service.GameService
 //import com.abekirev.dbd.entity.otherPlayer
 import com.abekirev.dbd.service.PlayerService
+import com.abekirev.dbd.service.TournamentService
 import com.abekirev.dbd.web.LocalizedMessageSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -24,6 +27,8 @@ import javax.validation.Valid
 @Scope(WebApplicationContext.SCOPE_SESSION)
 @RequestMapping("/staff/")
 class StaffController @Autowired constructor(private val playerService: PlayerService,
+                                             private val gameService: GameService,
+                                             private val tournamentService: TournamentService,
                                              private val localizedMessageSource: LocalizedMessageSource) {
 
     private val playerRegistrationViewName = "staff/registerPlayer"
@@ -55,8 +60,10 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
     }
 
     @GetMapping("register/game/")
-    fun registerGame(gameRegistrationForm: GameRegistrationForm,
-                     modelMap: ModelMap): String {
+    fun registerGame(
+            gameRegistrationForm: GameRegistrationForm,
+            modelMap: ModelMap
+    ): String {
         modelMap.fillMapWithPlayers()
         return gameRegistrationViewName
     }
@@ -71,48 +78,34 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
         when {
             bindingResult.hasErrors() -> return gameRegistrationViewName
             else -> {
+                val tournamentId = gameRegistrationForm.tournamentId!!
                 val whitePlayerId = gameRegistrationForm.whitePlayerId!!
                 val blackPlayerId = gameRegistrationForm.blackPlayerId!!
                 val result = gameRegistrationForm.result!!
                 if (whitePlayerId == blackPlayerId) {
                     modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.samePlayer"))
                     return gameRegistrationViewName
-                }
-                else {
-//                    val whitePlayer = playerService.get(whitePlayerId)
-//                    val blackPlayer = playerService.get(blackPlayerId)
-//                    val gameResult = when (result) {
-//                        "white" -> WhiteWon()
-//                        "black" -> BlackWon()
-//                        "draw" -> Draw()
-//                        else -> {
-//                            throw IllegalStateException("Result is unknown: $result")
-//                        }
-//                    }
-//                    when {
-//                        whitePlayer == null -> modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.unregisteredWhitePlayer"))
-//                        blackPlayer == null -> modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.unregisteredBlackPlayer"))
-//                        else -> {
-//                            val whitePlayerGame = PlayerGame("1", "name 1", whitePlayer, blackPlayer, gameResult)
-//                            playerService.update(com.abekirev.dbd.entity.Player(
-//                                    whitePlayer.id,
-//                                    whitePlayer.firstName,
-//                                    whitePlayer.lastName,
-//                                    whitePlayer.games.filter { game ->
-//                                        game.opponent.id != blackPlayer.id
-//                                    }.plus(game)
-//                            ))
-//                            playerService.update(Player(
-//                                    blackPlayer.id,
-//                                    blackPlayer.firstName,
-//                                    blackPlayer.lastName,
-//                                    blackPlayer.games.filter { game ->
-//                                        blackPlayer.otherPlayer(game).id != whitePlayer.id
-//                                    }.plus(game)
-//                            ))
-//                            modelMap.addAttribute("success", localizedMessageSource.getMessage("staff.register.game.success"))
-//                        }
-//                    }
+                } else {
+                    val (whitePlayer, blackPlayer, tournament) = playerService.get(whitePlayerId)
+                            .thenCombine(playerService.get(blackPlayerId)) { w, b -> w to b }
+                            .thenCombine(tournamentService.getById(tournamentId)) { p, t -> Triple(p.first, p.second, t) }
+                            .get()
+                    val gameResult = when (result) {
+                        "white" -> WhiteWon()
+                        "black" -> BlackWon()
+                        "draw" -> Draw()
+                        else -> null
+                    }
+                    when {
+                        gameResult == null -> modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.unknownGameResult"))
+                        whitePlayer == null -> modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.unregisteredWhitePlayer"))
+                        blackPlayer == null -> modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.unregisteredBlackPlayer"))
+                        tournament == null -> modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.unregisteredTournament"))
+                        else -> {
+                            gameService.registerGame(Game(tournament.id!!, tournament.name, GamePlayer(whitePlayer), GamePlayer(blackPlayer), gameResult))
+                            modelMap.addAttribute("success", localizedMessageSource.getMessage("staff.register.game.success"))
+                        }
+                    }
                 }
                 return gameRegistrationViewName
             }

@@ -1,11 +1,10 @@
 package com.abekirev.dbd.dal.repository
 
 import com.abekirev.dbd.dal.entity.UserDto
-import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
-import java.util.*
+import java.util.concurrent.CompletableFuture
 
 @Repository
-interface UserRepository : CrudRepository<UserDto, String>{
-    fun findByName(name: String): Optional<UserDto>
+interface UserRepository : StreamAndAsyncCrudRepository<UserDto, String>{
+    fun findByName(name: String): CompletableFuture<UserDto?>
 }
