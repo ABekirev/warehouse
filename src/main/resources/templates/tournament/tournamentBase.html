@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="base">
+<head>
+    <title>Список участников</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!--/*@thymesVar id="tournament" type="com.abekirev.dbd.entity.Tournament"*/-->
+    <nav id="sidebar" class="col-md-2">
+        <ul>
+            <li><a href="#" th:href="${'/tournament/info/?id=' + tournament.id}" th:text="#{tournament.info}">Информация</a></li>
+            <li><a href="#" th:href="${'/tournament/players/?id=' + tournament.id}" th:text="#{tournament.players}">Список участников</a></li>
+            <li><a href="#" th:href="${'/tournament/addplayer/?id=' + tournament.id}" th:text="#{tournament.addplayer}">Добавить участника</a></li>
+            <li><a href="#" th:href="${'/tournament/schedule/?id=' + tournament.id}" th:text="#{tournament.schedule}">Расписание</a></li>
+            <li><a href="#" th:href="${'/tournament/table/?id=' + tournament.id}" th:text="#{tournament.table}">Таблица результатов</a></li>
+        </ul>
+    </nav>
+    <div class="container-fluid col-md-10">
+        <div layout:fragment="tournamentsContent"></div>
+    </div>
+</div>
+</body>
+</html>

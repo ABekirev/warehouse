@@ -3,6 +3,7 @@ package com.abekirev.dbd.web.controller
 import com.abekirev.dbd.entity.IPlayer
 import com.abekirev.dbd.service.PlayerService
 import com.abekirev.dbd.service.TournamentService
+import com.abekirev.dbd.toList
 import com.abekirev.dbd.web.LocalizedMessageSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -23,7 +24,7 @@ class TournamentController @Autowired constructor(
 
     @GetMapping(params = arrayOf("id"))
     fun getById(modelMap: ModelMap, id: String): String {
-        val tournament = tournamentService.getById(id)
+        val tournament = tournamentService.getById(id).get()
         if (tournament != null) {
             modelMap.addAttribute("tournament", tournament)
         } else {
@@ -34,7 +35,7 @@ class TournamentController @Autowired constructor(
 
     @GetMapping("list/")
     fun list(modelMap: ModelMap): String {
-        modelMap.addAttribute("tournaments", tournamentService.getAll())
+        modelMap.addAttribute("tournaments", tournamentService.getAll().toList())
         return "tournament/list"
     }
 

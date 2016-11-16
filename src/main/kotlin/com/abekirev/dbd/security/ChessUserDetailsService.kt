@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 class ChessUserDetailsService(private val userService: UserService) : UserDetailsService {
     override fun loadUserByUsername(username: String?): UserDetails {
         return username?.let {
-            userService.getByName(username) ?: throw UsernameNotFoundException("No users found with username: $username")
+            userService.getByName(username).get() ?: throw UsernameNotFoundException("No users found with username: $username")
         } ?: throw IllegalAccessException("Username must not be null")
     }
 }
