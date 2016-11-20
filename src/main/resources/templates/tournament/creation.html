@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="tournament/tournamentsBase">
+<head>
+    <title>Список участников</title>
+</head>
+<body>
+<div layout:fragment="tournamentsContent">
+    <p class="error" th:if="${error != null}" th:text="${error}">Ошибка</p>
+    <p th:if="${success != null}" th:text="${success}">Турнир успешно создан</p>
+    <!--/*@thymesVar id="tournamentCreationForm" type="com.abekirev.dbd.web.controller.staff.TournamentCreationForm"*/-->
+    <div class="form">
+        <form th:action="@{/staff/tournament/create/}" th:object="${tournamentCreationForm}" method="post">
+            <table>
+                <tbody>
+                <tr>
+                    <td th:text="#{tournament.name}">Название</td>
+                    <td><input type="text" th:field="*{name}" tabindex="1"/></td>
+                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Название поля имеет ошибки</td>
+                </tr>
+                <tr>
+                    <td th:text="#{tournament.dateFrom}">Дата начала</td>
+                    <td><input type="text" th:field="*{dateFrom}" tabindex="2"/></td>
+                    <td th:if="${#fields.hasErrors('dateFrom')}" th:errors="*{dateFrom}">Дата начала указана ошибочно</td>
+                </tr>
+                <tr>
+                    <td th:text="#{tournament.dateTo}">Дата окончания</td>
+                    <td><input type="text" th:field="*{dateTo}" tabindex="2"/></td>
+                    <td th:if="${#fields.hasErrors('dateTo')}" th:errors="*{dateTo}">Дата окончания указана ошибочно</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="submitButton"><input type="submit" th:value="Создать" value="Создать"/></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

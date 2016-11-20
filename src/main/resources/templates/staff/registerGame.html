@@ -10,7 +10,7 @@
     <div id="gameRegistration" class="text-center roundedPanel">
         <p class="error" th:if="${error != null}" th:text="${error}"></p>
         <p th:if="${success != null}" th:text="${success}">Результат был успешно сохранен</p>
-        <!--/*@thymesVar id="gameRegistrationForm" type="com.abekirev.dbd.web.controller.staff.StaffController.GameRegistrationForm"*/-->
+        <!--/*@thymesVar id="gameRegistrationForm" type="com.abekirev.dbd.web.controller.staff.GameRegistrationForm"*/-->
         <form th:action="@{/staff/register/game/}" th:object="${gameRegistrationForm}" method="post">
             <table>
                 <tbody>

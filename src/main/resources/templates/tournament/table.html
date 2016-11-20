@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org"
-      layout:decorator="base">
+      layout:decorator="tournament/tournamentBase">
 <head>
-    <title>Таблица турнира</title>
+    <title>Результаты турнира</title>
 </head>
 <body>
-<div layout:fragment="content" class="container-fluid">
-    <div id="tournamentTable" class="roundedPanel">
+<div layout:fragment="tournamentsContent">
+    <div id="tournamentTable">
+        <!--/*@thymesVar id="results" type="java.util.Collection<com.abekirev.dbd.web.controller.TournamentController.ResultRow>"*/-->
         <table class="whiteBorderedTable">
-            <!--/*@thymesVar id="results" type="java.util.Collection<abekirev.dbd.web.controller.TournamentController.ResultRow>"*/-->
             <thead>
             <tr>
                 <th th:text="#{tournament.table.number}">№</th>
@@ -21,9 +21,12 @@
             </tr>
             </thead>
             <tbody>
+            <tr th:if="${results.size() == 0}">
+                <td th:text="#{tournament.table.nodata}" colspan="6">Результаты отсутствуют</td>
+            </tr>
             <tr th:each="result1, itStatus1 : ${results}">
                 <td th:text="${itStatus1.count}"></td>
-                <td th:text="${result1.lastName + ' ' + result1.firstName}"></td>
+                <td th:text="${result1.player.lastName + ' ' + result1.player.firstName}"></td>
                 <td th:each="result2, itStatus2 : ${results}" th:with="result = ${result1.gameResults[result2.id]}" th:text="${result == null ? 'X' : result}"></td>
                 <td th:text="${result1.points}"></td>
                 <td th:text="${result1.bergerCoef}"></td>

@@ -109,3 +109,7 @@ nav ul {
     border-collapse: separate;
     border-spacing: 5px;
 }
+
+.form {
+    text-align: center;
+}

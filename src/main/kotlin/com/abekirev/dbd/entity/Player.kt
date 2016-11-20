@@ -17,6 +17,11 @@ data class Player(override val id: String?,
                   override val firstName: String,
                   override val lastName: String,
                   override val games: Collection<PlayerGame>) : IPlayer {
+
+    constructor(firstName: String, lastName: String) : this(null, firstName, lastName)
+
+    constructor(id: String?, firstName: String, lastName: String) : this(id, firstName, lastName, emptySet())
+
     fun addGame(game: PlayerGame): Player {
         return Player(id, firstName, lastName, games.filter { game.opponent.id != it.opponent.id }.plus(game))
     }
@@ -79,24 +84,4 @@ sealed class PlayerGameResult {
 sealed class PlayerGameSide {
     class White : PlayerGameSide()
     class Black : PlayerGameSide()
-}
-
-fun Player.points(): Double {
-    return games.fold(.0) { points, game ->
-        points + points(game)
-    }
-}
-
-fun points(game: PlayerGame): Double {
-    return when (game.result) {
-        is PlayerGameResult.Won -> 1.0
-        is PlayerGameResult.Lost -> .0
-        is PlayerGameResult.Draw -> .5
-    }
-}
-
-fun Player.bergerCoef(players: Collection<Player>): Double {
-    return games.fold(.0) { points, game ->
-        points + points(game) * players.filter { it.id == game.opponent.id }.single().points()
-    }
 }

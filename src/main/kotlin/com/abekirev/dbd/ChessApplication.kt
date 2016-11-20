@@ -1,9 +1,11 @@
 package com.abekirev.dbd
 
 import com.abekirev.dbd.dal.DalConfiguration
+import com.abekirev.dbd.dal.dao.GameDao
 import com.abekirev.dbd.dal.dao.PlayerDao
 import com.abekirev.dbd.dal.dao.TournamentDao
 import com.abekirev.dbd.dal.dao.UserDao
+import com.abekirev.dbd.service.GameService
 import com.abekirev.dbd.service.PlayerService
 import com.abekirev.dbd.service.TournamentService
 import com.abekirev.dbd.service.UserService
@@ -45,5 +47,9 @@ open class ChessApplication {
 
     @Bean open fun tournamentService(tournamentDao: TournamentDao): TournamentService {
         return TournamentService(tournamentDao)
+    }
+
+    @Bean open fun gameService(gameDao: GameDao, tournamentDao: TournamentDao, playerDao: PlayerDao): GameService {
+        return GameService(gameDao, tournamentDao, playerDao)
     }
 }

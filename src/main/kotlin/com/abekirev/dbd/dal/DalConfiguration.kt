@@ -1,8 +1,10 @@
 package com.abekirev.dbd.dal
 
+import com.abekirev.dbd.dal.dao.GameDao
 import com.abekirev.dbd.dal.dao.PlayerDao
 import com.abekirev.dbd.dal.dao.TournamentDao
 import com.abekirev.dbd.dal.dao.UserDao
+import com.abekirev.dbd.dal.repository.GameRepository
 import com.abekirev.dbd.dal.repository.PlayerProjectionRepository
 import com.abekirev.dbd.dal.repository.PlayerRepository
 import com.abekirev.dbd.dal.repository.TournamentRepository
@@ -33,6 +35,10 @@ open class DalConfiguration {
 
     @Bean open fun tournamentDao(tournamentRepository: TournamentRepository): TournamentDao {
         return TournamentDao(tournamentRepository)
+    }
+
+    @Bean open fun gameDao(gameRepository: GameRepository): GameDao {
+        return GameDao(gameRepository)
     }
 
     @Bean open fun defaultMongoConverter(mongoDbFactory: MongoDbFactory): MongoConverter {

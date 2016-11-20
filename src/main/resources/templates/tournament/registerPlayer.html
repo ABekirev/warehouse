@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org"
-      layout:decorator="base">
+      layout:decorator="tournament/tournamentBase">
 <head>
-    <title>Регистрация игрока</title>
+    <title>Результаты турнира</title>
 </head>
 <body>
-<div layout:fragment="content" class="container-fluid">
-    <div id="playerRegistration" class="text-center roundedPanel">
+<div layout:fragment="tournamentsContent">
+    <div class="form">
         <p class="error" th:if="${error != null}" th:text="${error}"></p>
         <p th:if="${success != null}" th:text="${success}">Игрок успешно зарегистрирован</p>
-        <!--/*@thymesVar id="gameRegistrationForm" type="com.abekirev.dbd.web.controller.staff.GameRegistrationForm"*/-->
-        <form th:action="@{/staff/register/player/}" th:object="${playerRegistrationForm}" method="post">
+        <!--/*@thymesVar id="tournament" type="com.abekirev.dbd.entity.Tournament"*/-->
+        <!--/*@thymesVar id="tournamentPlayerRegistrationForm" type="com.abekirev.dbd.web.controller.staff.TournamentPlayerRegistrationForm"*/-->
+        <form th:action="${'/staff/tournament/registerPlayer/?id=' + tournament.id}" th:object="${tournamentPlayerRegistrationForm}" method="post">
             <table>
                 <tbody>
                 <tr>

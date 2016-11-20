@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="tournament/tournamentBase">
+<head>
+    <title>Результаты турнира</title>
+</head>
+<body>
+<div layout:fragment="tournamentsContent">
+    <div id="tournamentTable">
+        <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.entity.TournamentPlayer>"*/-->
+        <table class="whiteBorderedTable">
+            <thead>
+            <tr>
+                <th th:text="#{player.lastName}">Фамилия</th>
+                <th th:text="#{player.firstName}">Имя</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${players.size() == 0}">
+                <td th:text="#{tournament.players.table.nodata}" colspan="6">Результаты отсутствуют</td>
+            </tr>
+            <tr th:each="p, itStatus : ${players}">
+                <td th:text="${p.firstName}"></td>
+                <td th:text="${p.lastName}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
