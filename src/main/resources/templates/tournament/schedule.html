@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="tournament/tournamentBase">
+<head>
+    <title>Расписание турнира</title>
+</head>
+<body>
+<div layout:fragment="tournamentsContent">
+    <div id="tournamentTable">
+        <!--/*@thymesVar id="schedule" type="java.util.Collection<java.lang.reflect.Array<kotlin.Pair>>"*/-->
+        <table class="whiteBorderedTable">
+            <thead>
+            <tr>
+                <th></th>
+                <th th:each="turn, itStatus : ${schedule}" th:text="${itStatus.count}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="turn, itStatus1 : ${schedule}">
+                <td th:text="${itStatus1.count}"></td>
+                <td th:each="i : ${#numbers.sequence(0, itStatus1.count - 1)}" th:text="${turn != null ? (turn.whitePlayer.lastName + '-' + turn.blackPlayer.lastName) : ''}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

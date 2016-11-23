@@ -54,6 +54,7 @@ internal fun tournamentPlayerDtoToTournamentPlayer(player: TournamentPlayerDto):
 internal fun tournamentScheduleDtoToSchedule(schedule: TournamentScheduleDto): Schedule {
     return Schedule(
             schedule.turn!!,
+            schedule.table!!,
             schedule.whitePlayer?.let(::tournamentPlayerDtoToTournamentPlayer) ?: throw IllegalArgumentException(),
             schedule.blackPlayer?.let(::tournamentPlayerDtoToTournamentPlayer) ?: throw IllegalArgumentException()
     )
@@ -100,6 +101,7 @@ internal fun tournamentPlayerToTournamentPlayerDto(player: TournamentPlayer): To
 internal fun scheduleToTournamentScheduleDto(schedule: Schedule): TournamentScheduleDto {
     return TournamentScheduleDto(
             schedule.turn,
+            schedule.table,
             schedule.whitePlayer.let(::tournamentPlayerToTournamentPlayerDto),
             schedule.blackPlayer.let(::tournamentPlayerToTournamentPlayerDto)
     )

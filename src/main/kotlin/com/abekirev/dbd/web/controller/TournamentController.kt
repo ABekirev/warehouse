@@ -12,6 +12,7 @@ import com.abekirev.dbd.entity.PlayerGameSide.Black
 import com.abekirev.dbd.entity.PlayerGameSide.White
 import com.abekirev.dbd.entity.TournamentGame
 import com.abekirev.dbd.entity.TournamentPlayer
+import com.abekirev.dbd.isOdd
 import com.abekirev.dbd.service.PlayerService
 import com.abekirev.dbd.service.TournamentService
 import com.abekirev.dbd.toList
@@ -23,7 +24,8 @@ import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.context.WebApplicationContext
-import java.util.*
+import kotlin.comparisons.compareBy
+import kotlin.comparisons.reverseOrder
 
 val tournamentViewName = "tournament/tournament"
 
@@ -98,7 +100,12 @@ class TournamentController @Autowired constructor(
                                  val gameResults: Map<TournamentPlayer, PlayerGameResult>,
                                  val points: Double,
                                  val bergerCoef: Double,
-                                 val place: Int?)
+                                 val place: Place?)
+
+    private sealed class Place {
+        class Single(val place: Int) : Place()
+        class Range(val start: Int, val end: Int) : Place()
+    }
 
     private fun resultTable(players: Collection<TournamentPlayer>, games: Collection<TournamentGame>): Collection<ResultTableRow> {
         val gameResultsMap: Map<TournamentPlayer, Map<TournamentPlayer, PlayerGameResult>> = players.map { player ->
@@ -113,13 +120,24 @@ class TournamentController @Autowired constructor(
         }.toMap()
         val pointsMap: Map<TournamentPlayer, Double> = gameResultsMap.map { e -> e.key to e.value.values.map { points(it) }.sum() }.toMap()
         val bergerCoefMap: Map<TournamentPlayer, Double> = gameResultsMap.map { e ->
-            e.key to e.value.map { e ->
-                points(e.value) * (pointsMap[e.key] ?: .0)
-            }.sum()
+            e.key to e.value.map { points(it.value) * (pointsMap[it.key] ?: .0) }.sum()
         }.toMap()
-        val placeMap = players.sortedWith(Comparator { p1, p2 -> -bergerCoefMap[p1]!!.compareTo(bergerCoefMap[p2]!!) })
-                .mapIndexed { i, player -> player to i }
-                .toMap()
+        val playersSortedByBergerCoef = bergerCoefMap.entries
+                .groupBy { it.value }
+                .mapValues { e -> e.value.map { it.key } }
+                .toSortedMap(reverseOrder())
+                .values.toList()
+        var nextPlace = 1
+        val placeMap = playersSortedByBergerCoef
+                .flatMap { players ->
+                    val place = if (players.size == 1) {
+                        Place.Single(nextPlace)
+                    } else {
+                        Place.Range(nextPlace, nextPlace + players.size - 1)
+                    }
+                    nextPlace += players.size
+                    players.map { it to place }
+                }.toMap()
         return players.map { player ->
             ResultTableRow(
                     player,
@@ -148,7 +166,12 @@ class TournamentController @Autowired constructor(
                         }.toMap(),
                         it.points,
                         it.bergerCoef,
-                        it.place
+                        it.place?.let {
+                            when (it) {
+                                is Place.Single -> it.place.toString()
+                                is Place.Range -> "${it.start}-${it.end}"
+                            }
+                        }
                 )
             }
             modelMap.addAttribute("results", results)
@@ -157,6 +180,7 @@ class TournamentController @Autowired constructor(
         }
         return "tournament/table"
     }
+
     @GetMapping("players/", params = arrayOf("id"))
     fun getPlayersById(modelMap: ModelMap, id: String): String {
         val tournament = tournamentService.getById(id).get()
@@ -173,10 +197,44 @@ class TournamentController @Autowired constructor(
                     val gameResults: Map<String, String>,
                     val points: Double,
                     val bergerCoef: Double,
-                    val place: Int?)
+                    val place: String?)
 
-    @GetMapping("schedule/")
-    fun schedule(modelMap: ModelMap): String {
-        return "home"
+    @GetMapping("schedule/", params = arrayOf("id"))
+    fun schedule(modelMap: ModelMap, id: String): String {
+        val tournament = tournamentService.getById(id).get()
+        if (tournament != null) {
+            modelMap.addAttribute("tournament", tournament)
+            modelMap.addAttribute("schedule", tournament.schedule)
+        } else {
+            modelMap.addAttribute("error", localizedMessageSource.getMessage("tournament.not_found"))
+        }
+        return "tournament/schedule"
+    }
+
+    @GetMapping("schedule/gen", params = arrayOf("id"))
+    fun getSchedule(modelMap: ModelMap, id: String): String {
+        val tournament = tournamentService.getById(id).get()
+        if (tournament != null) {
+            val updatedTournament = tournamentService.update(tournament.genSchedule()).get()
+            modelMap.addAttribute("tournament", updatedTournament)
+            val schedule: List<Array<Pair<TournamentPlayer, TournamentPlayer>?>> = updatedTournament.schedule
+                    .groupBy { it.turn }
+                    .let {
+                        val count = it.count()
+                        it.mapValues { p ->
+                            val array = kotlin.arrayOfNulls<Pair<TournamentPlayer, TournamentPlayer>>(count)
+                            p.value.forEach { schedule ->
+                                array[schedule.table - 1] = schedule.whitePlayer to schedule.blackPlayer
+                            }
+                            array
+                        }.toSortedMap(compareBy({ it }, { it })).values.toList()
+                    }
+
+            modelMap.addAttribute("tableSize", tournament.players.size.let { if (it.isOdd()) it else (it + 1) })
+            modelMap.addAttribute("schedule", schedule)
+        } else {
+            modelMap.addAttribute("error", localizedMessageSource.getMessage("tournament.not_found"))
+        }
+        return "tournament/schedule"
     }
 }

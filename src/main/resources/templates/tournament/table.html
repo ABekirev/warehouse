@@ -27,7 +27,7 @@
             <tr th:each="result1, itStatus1 : ${results}">
                 <td th:text="${itStatus1.count}"></td>
                 <td th:text="${result1.player.lastName + ' ' + result1.player.firstName}"></td>
-                <td th:each="result2, itStatus2 : ${results}" th:with="result = ${result1.gameResults[result2.id]}" th:text="${result == null ? 'X' : result}"></td>
+                <td th:each="result2, itStatus2 : ${results}" th:with="result = ${result1.gameResults[result2.player.id]}" th:text="${result == null ? 'X' : result}"></td>
                 <td th:text="${result1.points}"></td>
                 <td th:text="${result1.bergerCoef}"></td>
                 <td th:text="${result1.place}"></td>

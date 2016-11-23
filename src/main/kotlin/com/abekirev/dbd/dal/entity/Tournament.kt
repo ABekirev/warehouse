@@ -33,9 +33,10 @@ data class TournamentPlayerDto(var id: String?,
 }
 
 data class TournamentScheduleDto(var turn: Int?,
+                                 var table: Int?,
                                  var whitePlayer: TournamentPlayerDto?,
                                  var blackPlayer: TournamentPlayerDto?) {
-    internal constructor() : this(null, null, null)
+    internal constructor() : this(null, null, null, null)
 }
 
 data class TournamentGameDto(var id: String?,
