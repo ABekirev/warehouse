@@ -10,6 +10,7 @@ import com.abekirev.dbd.entity.PlayerGameResult.Won
 import com.abekirev.dbd.entity.PlayerGameSide
 import com.abekirev.dbd.entity.PlayerGameSide.Black
 import com.abekirev.dbd.entity.PlayerGameSide.White
+import com.abekirev.dbd.entity.Schedule
 import com.abekirev.dbd.entity.TournamentGame
 import com.abekirev.dbd.entity.TournamentPlayer
 import com.abekirev.dbd.isOdd
@@ -204,7 +205,7 @@ class TournamentController @Autowired constructor(
         val tournament = tournamentService.getById(id).get()
         if (tournament != null) {
             modelMap.addAttribute("tournament", tournament)
-            modelMap.addAttribute("schedule", tournament.schedule)
+            modelMap.addAttribute("schedule", tournament.schedule.toViewSchedule())
         } else {
             modelMap.addAttribute("error", localizedMessageSource.getMessage("tournament.not_found"))
         }
@@ -212,29 +213,37 @@ class TournamentController @Autowired constructor(
     }
 
     @GetMapping("schedule/gen", params = arrayOf("id"))
-    fun getSchedule(modelMap: ModelMap, id: String): String {
+    fun genSchedule(modelMap: ModelMap, id: String): String {
         val tournament = tournamentService.getById(id).get()
         if (tournament != null) {
-            val updatedTournament = tournamentService.update(tournament.genSchedule()).get()
+            val updatedTournament = tournamentService.update(
+                    tournament.changeSchedule(
+                            tournamentService.getScheduleTable(
+                                    tournament.players.count().let { if (it.isOdd()) it else (it + 1) }
+                            )!!.genSchedule(tournament.players))
+            ).get()
             modelMap.addAttribute("tournament", updatedTournament)
-            val schedule: List<Array<Pair<TournamentPlayer, TournamentPlayer>?>> = updatedTournament.schedule
-                    .groupBy { it.turn }
-                    .let {
-                        val count = it.count()
-                        it.mapValues { p ->
-                            val array = kotlin.arrayOfNulls<Pair<TournamentPlayer, TournamentPlayer>>(count)
-                            p.value.forEach { schedule ->
-                                array[schedule.table - 1] = schedule.whitePlayer to schedule.blackPlayer
-                            }
-                            array
-                        }.toSortedMap(compareBy({ it }, { it })).values.toList()
-                    }
-
             modelMap.addAttribute("tableSize", tournament.players.size.let { if (it.isOdd()) it else (it + 1) })
-            modelMap.addAttribute("schedule", schedule)
+            modelMap.addAttribute("schedule", updatedTournament.schedule.toViewSchedule())
         } else {
             modelMap.addAttribute("error", localizedMessageSource.getMessage("tournament.not_found"))
         }
         return "tournament/schedule"
+    }
+
+    private fun Collection<Schedule>.toViewSchedule(): List<Array<Pair<TournamentPlayer, TournamentPlayer>?>> {
+        val schedule: List<Array<Pair<TournamentPlayer, TournamentPlayer>?>> = this
+                .groupBy { it.turn }
+                .let {
+                    val count = it.count()
+                    it.mapValues { p ->
+                        val array = arrayOfNulls<Pair<TournamentPlayer, TournamentPlayer>>(count)
+                        p.value.forEach { schedule ->
+                            array[schedule.table - 1] = schedule.whitePlayer to schedule.blackPlayer
+                        }
+                        array
+                    }.toSortedMap(compareBy({ it }, { it })).values.toList()
+                }
+        return schedule
     }
 }

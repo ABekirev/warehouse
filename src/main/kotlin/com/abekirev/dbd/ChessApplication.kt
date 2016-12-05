@@ -4,6 +4,7 @@ import com.abekirev.dbd.dal.DalConfiguration
 import com.abekirev.dbd.dal.dao.GameDao
 import com.abekirev.dbd.dal.dao.PlayerDao
 import com.abekirev.dbd.dal.dao.TournamentDao
+import com.abekirev.dbd.dal.dao.TournamentTableDao
 import com.abekirev.dbd.dal.dao.UserDao
 import com.abekirev.dbd.service.GameService
 import com.abekirev.dbd.service.PlayerService
@@ -21,35 +22,42 @@ fun main(args: Array<String>) {
 }
 
 @SpringBootApplication
-@Import(
-        DalConfiguration::class,
-        WebConfiguration::class
-)
+@Import(DalConfiguration::class,
+        WebConfiguration::class)
 open class ChessApplication {
-    @Bean open fun kotlinPropertyConfigurer(): PropertySourcesPlaceholderConfigurer {
-        val propertyConfigurer = PropertySourcesPlaceholderConfigurer()
-        propertyConfigurer.setPlaceholderPrefix("&{")
-        propertyConfigurer.setIgnoreUnresolvablePlaceholders(true)
-        return propertyConfigurer
+    @Bean
+    open fun kotlinPropertyConfigurer(): PropertySourcesPlaceholderConfigurer {
+        return PropertySourcesPlaceholderConfigurer().apply {
+            setPlaceholderPrefix("&{")
+            setIgnoreUnresolvablePlaceholders(true)
+        }
     }
 
-    @Bean open fun defaultPropertyConfigurer(): PropertySourcesPlaceholderConfigurer {
+    @Bean
+    open fun defaultPropertyConfigurer(): PropertySourcesPlaceholderConfigurer {
         return PropertySourcesPlaceholderConfigurer()
     }
 
-    @Bean open fun userService(userDao: UserDao): UserService {
+    @Bean
+    open fun userService(userDao: UserDao): UserService {
         return UserService(userDao)
     }
 
-    @Bean open fun playerService(playerDao: PlayerDao): PlayerService {
+    @Bean
+    open fun playerService(playerDao: PlayerDao): PlayerService {
         return PlayerService(playerDao)
     }
 
-    @Bean open fun tournamentService(tournamentDao: TournamentDao): TournamentService {
-        return TournamentService(tournamentDao)
+    @Bean
+    open fun tournamentService(tournamentDao: TournamentDao,
+                               tournamentTableDao: TournamentTableDao): TournamentService {
+        return TournamentService(tournamentDao, tournamentTableDao)
     }
 
-    @Bean open fun gameService(gameDao: GameDao, tournamentDao: TournamentDao, playerDao: PlayerDao): GameService {
+    @Bean
+    open fun gameService(gameDao: GameDao,
+                         tournamentDao: TournamentDao,
+                         playerDao: PlayerDao): GameService {
         return GameService(gameDao, tournamentDao, playerDao)
     }
 }

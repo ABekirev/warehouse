@@ -19,7 +19,7 @@
             <tbody>
             <tr th:each="turn, itStatus1 : ${schedule}">
                 <td th:text="${itStatus1.count}"></td>
-                <td th:each="i : ${#numbers.sequence(0, itStatus1.count - 1)}" th:text="${turn != null ? (turn.whitePlayer.lastName + '-' + turn.blackPlayer.lastName) : ''}"></td>
+                <td th:each="i : ${#numbers.sequence(0, itStatus1.count - 1)}" th:text="${turn[i].first.lastName + '-' + turn[i].second.lastName}"></td>
             </tr>
             </tbody>
         </table>

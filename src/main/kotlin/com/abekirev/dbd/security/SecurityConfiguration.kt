@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 
 @Configuration
 @EnableWebSecurity
@@ -66,6 +67,9 @@ open class SecurityConfiguration() {
                             .and()
                         .logout()
                             .permitAll()
+                            .and()
+                        .csrf()
+                            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             } else {
                 throw IllegalArgumentException("http must be not null")
             }

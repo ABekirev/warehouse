@@ -3,6 +3,7 @@ package com.abekirev.dbd.dal
 import com.abekirev.dbd.dal.dao.GameDao
 import com.abekirev.dbd.dal.dao.PlayerDao
 import com.abekirev.dbd.dal.dao.TournamentDao
+import com.abekirev.dbd.dal.dao.TournamentTableDao
 import com.abekirev.dbd.dal.dao.UserDao
 import com.abekirev.dbd.dal.repository.GameRepository
 import com.abekirev.dbd.dal.repository.PlayerProjectionRepository
@@ -24,24 +25,34 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories
 open class DalConfiguration {
 
-    @Bean open fun userDao(userRepository: UserRepository): UserDao {
+    @Bean
+    open fun userDao(userRepository: UserRepository): UserDao {
         return UserDao(userRepository)
     }
 
-    @Bean open fun playerDao(playerRepository: PlayerRepository,
-                             playerProjectionRepository: PlayerProjectionRepository): PlayerDao {
+    @Bean
+    open fun playerDao(playerRepository: PlayerRepository,
+                       playerProjectionRepository: PlayerProjectionRepository): PlayerDao {
         return PlayerDao(playerRepository, playerProjectionRepository)
     }
 
-    @Bean open fun tournamentDao(tournamentRepository: TournamentRepository): TournamentDao {
+    @Bean
+    open fun tournamentDao(tournamentRepository: TournamentRepository): TournamentDao {
         return TournamentDao(tournamentRepository)
     }
 
-    @Bean open fun gameDao(gameRepository: GameRepository): GameDao {
+    @Bean
+    open fun gameDao(gameRepository: GameRepository): GameDao {
         return GameDao(gameRepository)
     }
 
-    @Bean open fun defaultMongoConverter(mongoDbFactory: MongoDbFactory): MongoConverter {
+    @Bean
+    open fun tournamentTableDao(): TournamentTableDao {
+        return TournamentTableDao()
+    }
+
+    @Bean
+    open fun defaultMongoConverter(mongoDbFactory: MongoDbFactory): MongoConverter {
         return MappingMongoConverter(
                 DefaultDbRefResolver(mongoDbFactory),
                 MongoMappingContext()
@@ -50,9 +61,9 @@ open class DalConfiguration {
         }
     }
 
-    @Bean open fun mongoTemplate(
-            mongoDbFactory: MongoDbFactory,
-            defaultMongoConverter: MongoConverter
+    @Bean
+    open fun mongoTemplate(mongoDbFactory: MongoDbFactory,
+                           defaultMongoConverter: MongoConverter
     ): MongoTemplate {
         return MongoTemplate(mongoDbFactory, defaultMongoConverter)
     }
