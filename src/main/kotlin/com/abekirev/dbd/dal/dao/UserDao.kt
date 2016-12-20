@@ -9,6 +9,8 @@ class UserDao(private val userRepository: UserRepository) {
     fun getByName(name: String) = userRepository.findByName(name)
             .thenApplyAsync { it?.let(::userDtoToUser) }
 
+    fun getAll() = userRepository.findAll().map(::userDtoToUser)
+
     fun create(user: User) = userRepository.save(userToUserDto(user))
             .thenApplyAsync(::userDtoToUser)
 

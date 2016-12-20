@@ -11,6 +11,16 @@ data class User(val id: String?,
                 val authoritiesCollection: Collection<Authority>,
                 val enabled: Boolean,
                 val pass: String) : UserDetails {
+    constructor(
+            name: String,
+            credentialsNonExpired: Boolean,
+            accountNonExpired: Boolean,
+            accountNonLocked: Boolean,
+            authoritiesCollection: Collection<Authority>,
+            enabled: Boolean,
+            pass: String
+    ) : this(null, name, credentialsNonExpired, accountNonExpired, accountNonLocked, authoritiesCollection, enabled, pass)
+
     override fun getUsername(): String = name
 
     override fun isCredentialsNonExpired(): Boolean = credentialsNonExpired
