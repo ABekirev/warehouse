@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     val mapper = ObjectMapper().apply {
         enable(INDENT_OUTPUT)
     }
-    (3..32).forEach { playersCount ->
+    (2..32).forEach { playersCount ->
         val tournamentTable = loadTournamentTable(playersCount).toJsonTournamentTable()
         val filePath = "D:\\Projects\\warehouse\\src\\main\\resources\\tables\\table${playersCount}.json"
         mapper.writeValue(File(filePath), tournamentTable)

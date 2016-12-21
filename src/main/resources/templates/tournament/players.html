@@ -17,7 +17,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${players.size() == 0}">
+            <tr th:if="${players.empty}">
                 <td th:text="#{tournament.players.table.nodata}" colspan="6">Результаты отсутствуют</td>
             </tr>
             <tr th:each="p, itStatus : ${players}">

@@ -1,0 +1,10 @@
+{
+  "playersCount" : 2,
+  "tablesCount" : 1,
+  "turnsCount" : 1,
+  "turnRows" : {
+    "0" : {
+      "0" : [ 0, 1 ]
+    }
+  }
+}

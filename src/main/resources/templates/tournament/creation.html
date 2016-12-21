@@ -11,7 +11,7 @@
     <p th:if="${success != null}" th:text="${success}">Турнир успешно создан</p>
     <!--/*@thymesVar id="tournamentCreationForm" type="com.abekirev.dbd.web.controller.staff.TournamentCreationForm"*/-->
     <div class="form">
-        <form th:action="@{/staff/tournament/create/}" th:object="${tournamentCreationForm}" method="post">
+        <form id="tournamentCreationForm" th:action="@{/staff/tournament/create/}" th:object="${tournamentCreationForm}" method="post">
             <table>
                 <tbody>
                 <tr>

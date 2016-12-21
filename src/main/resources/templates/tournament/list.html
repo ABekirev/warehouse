@@ -17,6 +17,9 @@
         </tr>
         </thead>
         <tbody>
+        <tr th:if="${tournaments.empty}">
+            <td th:text="#{tournament.list.table.nodata}" colspan="6">Турниры отсутствуют</td>
+        </tr>
         <tr th:each="t, itStatus : ${tournaments}">
             <td><a th:href="${'/tournament/?id=' + t.id}" th:text="${t.name}"></a></td>
             <td th:text="${t.dateFrom}"></td>

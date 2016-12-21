@@ -27,7 +27,7 @@ data class Tournament(val id: String?,
     ) : this(null, name, dateFrom, dateTo, players, schedule, games, winner)
 
     fun addGame(game: TournamentGame): Tournament {
-        return Tournament(id, name, dateFrom, dateTo, players, schedule, games.filter { !(game.whitePlayer.playerOf(it) && game.blackPlayer.playerOf(game)) }.plus(game), winner)
+        return Tournament(id, name, dateFrom, dateTo, players, schedule, games.filter { !(game.whitePlayer.playerOf(it) && game.blackPlayer.playerOf(it)) }.plus(game), winner)
     }
 
     fun addPlayer(player: TournamentPlayer): Tournament {

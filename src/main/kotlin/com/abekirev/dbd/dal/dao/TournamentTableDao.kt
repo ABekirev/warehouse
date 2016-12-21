@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 class TournamentTableDao {
     private val mapper = ObjectMapper()
 
-    val tournamentTables: Map<Int, Lazy<TournamentTable>> = (3..32).map { playersCount ->
+    val tournamentTables: Map<Int, Lazy<TournamentTable>> = (2..32).map { playersCount ->
         playersCount to lazy { loadTournamentTable(playersCount) }
     }.toMap()
 

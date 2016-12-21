@@ -1,7 +1,7 @@
 {
   "playersCount" : 26,
-  "tablesCount" : 12,
-  "turnsCount" : 24,
+  "tablesCount" : 13,
+  "turnsCount" : 25,
   "turnRows" : {
     "0" : {
       "0" : [ 0, 25 ],
