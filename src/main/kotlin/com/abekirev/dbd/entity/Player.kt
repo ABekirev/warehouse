@@ -44,14 +44,14 @@ data class PlayerGame(val id: String,
             Opponent(if (player.isWhite(game)) game.whitePlayer else game.blackPlayer),
             when (player.isWhite(game)) {
                 true -> when (game.result) {
-                    is GameResult.WhiteWon -> Won()
-                    is GameResult.BlackWon -> Lost()
-                    is GameResult.Draw -> Draw()
+                    is GameResult.WhiteWon -> Won
+                    is GameResult.BlackWon -> Lost
+                    is GameResult.Draw -> Draw
                 }
                 false -> when (game.result) {
-                    is GameResult.WhiteWon -> Lost()
-                    is GameResult.BlackWon -> Won()
-                    is GameResult.Draw -> Draw()
+                    is GameResult.WhiteWon -> Lost
+                    is GameResult.BlackWon -> Won
+                    is GameResult.Draw -> Draw
                 }
             }
     )
@@ -68,15 +68,15 @@ data class Opponent(val id: String,
 }
 
 sealed class PlayerGameResult {
-    class Won : PlayerGameResult() {
+    object Won : PlayerGameResult() {
         override fun toString() = "Won"
     }
 
-    class Lost : PlayerGameResult() {
+    object Lost : PlayerGameResult() {
         override fun toString() = "Lost"
     }
 
-    class Draw : PlayerGameResult() {
+    object Draw : PlayerGameResult() {
         override fun toString() = "Draw"
     }
 }

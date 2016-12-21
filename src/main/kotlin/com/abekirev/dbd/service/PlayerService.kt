@@ -14,6 +14,10 @@ class PlayerService(private val playerDao: PlayerDao) {
         return playerDao.getAllProjections()
     }
 
+    fun getAllProjectionsWithIdNotInCollection(playerIds: Collection<String>): List<Player> {
+        return playerDao.getAllProjectionsWithIdNotInCollection(playerIds)
+    }
+
     fun get(id: String): CompletableFuture<Player?> {
         return playerDao.get(id)
     }

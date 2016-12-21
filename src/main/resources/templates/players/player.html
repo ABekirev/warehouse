@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="base">
+<head>
+    <title>Страница игрока</title>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid">
+    <div id="tournamentTable">
+        <!--/*@thymesVar id="player" type="com.abekirev.dbd.entity.Player"*/-->
+        <table border="1" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+            <tr>
+                <td th:text="#{player.lastName}">Фамилия</td>
+                <td th:text="${player.lastName}"></td>
+            </tr>
+            <tr>
+                <td th:text="#{player.firstName}">Имя</td>
+                <td th:text="${player.firstName}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <table border="1" cellspacing="0" cellpadding="0" align="center">
+            <thead>
+                <th th:text="#{player.games.tournamentname}"></th>
+                <th th:text="#{player.lastName}"></th>
+                <th th:text="#{player.firstName}"></th>
+                <th th:text="#{player.games.result}"></th>
+            </thead>
+            <tbody>
+            <tr th:each="game, itStatus : ${player.games}">
+                <td th:text="${game.tournamentName}"></td>
+                <td th:text="${game.opponent.lastName}"></td>
+                <td th:text="${game.opponent.firstName}"></td>
+                <td th:text="#{${game.result}}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

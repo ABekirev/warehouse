@@ -15,9 +15,9 @@ class GameDao(private val gameRepository: GameRepository) {
 }
 
 internal sealed class GameResult(val dbValue: String) {
-    class WhiteWon : GameResult("white")
-    class BlackWon : GameResult("black")
-    class Draw : GameResult("draw")
+    object WhiteWon : GameResult("white")
+    object BlackWon : GameResult("black")
+    object Draw : GameResult("draw")
 }
 
 internal fun gameDtoToGame(game: GameDto): Game {
@@ -29,9 +29,9 @@ internal fun gameDtoToGame(game: GameDto): Game {
             game.blackPlayer?.let(::gamePlayerDtoToGamePlayer) ?: throw IllegalArgumentException(),
             game.result?.let { result ->
                 when (result) {
-                    GameResult.WhiteWon().dbValue -> com.abekirev.dbd.entity.GameResult.WhiteWon()
-                    GameResult.BlackWon().dbValue -> com.abekirev.dbd.entity.GameResult.BlackWon()
-                    GameResult.Draw().dbValue -> com.abekirev.dbd.entity.GameResult.Draw()
+                    GameResult.WhiteWon.dbValue -> com.abekirev.dbd.entity.GameResult.WhiteWon
+                    GameResult.BlackWon.dbValue -> com.abekirev.dbd.entity.GameResult.BlackWon
+                    GameResult.Draw.dbValue -> com.abekirev.dbd.entity.GameResult.Draw
                     else -> throw IllegalArgumentException()
                 }
             } ?: throw IllegalArgumentException()
@@ -50,12 +50,13 @@ internal fun gameToGameDto(game: Game): GameDto {
     return GameDto(
             game.id,
             game.tournamentId,
+            game.tournamentName,
             gamePlayerToGamePlayerDto(game.whitePlayer),
             gamePlayerToGamePlayerDto(game.blackPlayer),
             when (game.result) {
-                is com.abekirev.dbd.entity.GameResult.WhiteWon -> GameResult.WhiteWon().dbValue
-                is com.abekirev.dbd.entity.GameResult.BlackWon -> GameResult.BlackWon().dbValue
-                is com.abekirev.dbd.entity.GameResult.Draw -> GameResult.Draw().dbValue
+                is com.abekirev.dbd.entity.GameResult.WhiteWon -> GameResult.WhiteWon.dbValue
+                is com.abekirev.dbd.entity.GameResult.BlackWon -> GameResult.BlackWon.dbValue
+                is com.abekirev.dbd.entity.GameResult.Draw -> GameResult.Draw.dbValue
             }
     )
 }

@@ -10,7 +10,7 @@ class TournamentService(private val tournamentDao: TournamentDao,
                         private val tournamentTableDao: TournamentTableDao) {
     fun getAll(): Stream<Tournament> = tournamentDao.getAll()
 
-    fun getById(id: String) = tournamentDao.get(id)
+    fun get(id: String) = tournamentDao.get(id)
 
     fun create(tournament: Tournament) = tournamentDao.create(tournament)
 

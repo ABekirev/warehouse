@@ -16,15 +16,15 @@ data class Game(val id: String?,
 }
 
 sealed class GameResult {
-    class WhiteWon : GameResult() {
+    object WhiteWon : GameResult() {
         override fun toString() = "White"
     }
 
-    class BlackWon : GameResult() {
+    object BlackWon : GameResult() {
         override fun toString() = "Black"
     }
 
-    class Draw : GameResult() {
+    object Draw : GameResult() {
         override fun toString() = "Draw"
     }
 }

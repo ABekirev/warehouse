@@ -8,6 +8,7 @@ import com.abekirev.dbd.entity.GameResult.WhiteWon
 import com.abekirev.dbd.entity.Player
 import com.abekirev.dbd.entity.PlayerGame
 import com.abekirev.dbd.entity.Tournament
+import com.abekirev.dbd.entity.TournamentGame
 import com.abekirev.dbd.entity.TournamentPlayer
 import com.abekirev.dbd.service.GameService
 //import com.abekirev.dbd.entity.otherPlayer
@@ -40,7 +41,7 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
                                              private val localizedMessageSource: LocalizedMessageSource) {
 
     private val playerRegistrationViewName = "staff/registerPlayer"
-    private val gameRegistrationViewName = "staff/registerGame"
+    private val gameRegistrationViewName = "tournament/registerGame"
 
     @GetMapping("register/player/")
     fun registerPlayer(playerRegistrationForm: PlayerRegistrationForm): String {
@@ -61,30 +62,39 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
         return playerRegistrationViewName
     }
 
-    fun ModelMap.fillMapWithPlayers() {
-        put("players", playerService.getAllProjections().map { Player(it.id!!, it.firstName, it.lastName) })
+    fun ModelMap.fillMapWithPlayers(tournament: Tournament) {
+        put("players", tournament.players.map { Player(it.id, it.firstName, it.lastName) })
     }
 
-    @GetMapping("register/game/")
-    fun registerGame(
+    @GetMapping("tournament/registerGame/", params = arrayOf("id"))
+    fun gameForTournamentRegistration(
+            modelMap: ModelMap,
             gameRegistrationForm: GameRegistrationForm,
-            modelMap: ModelMap
+            id: String
     ): String {
-        modelMap.fillMapWithPlayers()
+        val tournament = tournamentService.get(id).get()
+        if (tournament != null) {
+            modelMap.fillMapWithPlayers(tournament)
+            modelMap.addAttribute("tournament", tournament)
+        } else {
+            modelMap.addAttribute("error", localizedMessageSource.getMessage("tournament.not_found"))
+        }
         return gameRegistrationViewName
     }
 
-    @PostMapping("register/game/")
-    fun registerGameAction(
+    @PostMapping("tournament/registerGame/", params = arrayOf("id"))
+    fun registerGameForTournament(
+            modelMap: ModelMap,
             @Valid gameRegistrationForm: GameRegistrationForm,
             bindingResult: BindingResult,
-            modelMap: ModelMap
+            id: String
     ): String {
-        modelMap.fillMapWithPlayers()
+        val tournament = tournamentService.get(id).get()!!
+        modelMap.fillMapWithPlayers(tournament)
+        modelMap.addAttribute("tournament", tournament)
         when {
             bindingResult.hasErrors() -> return gameRegistrationViewName
             else -> {
-                val tournamentId = gameRegistrationForm.tournamentId!!
                 val whitePlayerId = gameRegistrationForm.whitePlayerId!!
                 val blackPlayerId = gameRegistrationForm.blackPlayerId!!
                 val result = gameRegistrationForm.result!!
@@ -92,14 +102,13 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
                     modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.samePlayer"))
                     return gameRegistrationViewName
                 } else {
-                    val (whitePlayer, blackPlayer, tournament) = playerService.get(whitePlayerId)
+                    val (whitePlayer, blackPlayer) = playerService.get(whitePlayerId)
                             .thenCombine(playerService.get(blackPlayerId)) { w, b -> w to b }
-                            .thenCombine(tournamentService.getById(tournamentId)) { p, t -> Triple(p.first, p.second, t) }
                             .get()
                     val gameResult = when (result) {
-                        "white" -> WhiteWon()
-                        "black" -> BlackWon()
-                        "draw" -> Draw()
+                        "white" -> WhiteWon
+                        "black" -> BlackWon
+                        "draw" -> Draw
                         else -> null
                     }
                     when {
@@ -108,7 +117,8 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
                         blackPlayer == null -> modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.unregisteredBlackPlayer"))
                         tournament == null -> modelMap.addAttribute("error", localizedMessageSource.getMessage("staff.register.game.unregisteredTournament"))
                         else -> {
-                            gameService.registerGame(Game(tournament.id!!, tournament.name, GamePlayer(whitePlayer), GamePlayer(blackPlayer), gameResult))
+                            gameService.registerGame(Game(tournament.id!!, tournament.name, GamePlayer(whitePlayer), GamePlayer(blackPlayer), gameResult)).join()
+                            modelMap.addAttribute("tournament", tournamentService.get(id).get()!!)
                             modelMap.addAttribute("success", localizedMessageSource.getMessage("staff.register.game.success"))
                         }
                     }
@@ -171,24 +181,72 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
         return tournamentCreationViewName
     }
 
+    private val registerExistingPlayerViewName = "tournament/registerExistingPlayer"
+
+    @GetMapping("tournament/registerExistingPlayer/", params = arrayOf("id"))
+    fun existingPlayerForTournamentRegistration(modelMap: ModelMap,
+                                                tournamentExistingPlayerRegistrationForm: TournamentExistingPlayerRegistrationForm,
+                                                id: String): String {
+        val tournament = tournamentService.get(id).get()
+        if (tournament != null) {
+            modelMap.addAttribute("tournament", tournament)
+            modelMap.addAttribute("players", playerService.getAllProjectionsWithIdNotInCollection(tournament.players.map(TournamentPlayer::id)))
+        } else {
+            modelMap.addAttribute("error", localizedMessageSource.getMessage("tournament.not_found"))
+        }
+        return registerExistingPlayerViewName
+    }
+
+    @PostMapping("tournament/registerExistingPlayer/", params = arrayOf("id"))
+    fun registerExistingPlayerForTournament(modelMap: ModelMap,
+                                            tournamentExistingPlayerRegistrationForm: TournamentExistingPlayerRegistrationForm,
+                                            id: String): String {
+        val tournament = tournamentService.get(id).get()
+        if (tournament != null) {
+            val id = tournamentExistingPlayerRegistrationForm.id
+            when (id) {
+                null -> modelMap.addAttribute("error", "Id is null")
+                else -> {
+                    val updatedTournament = playerService.get(id)
+                            .thenApply { player ->
+                                tournament.addPlayer(TournamentPlayer(player!!))
+                            }
+                            .thenCompose { tournament ->
+                                tournamentService.update(tournament)
+                            }.get()
+                    modelMap.addAttribute("tournament", updatedTournament)
+                    val players = playerService.getAllProjectionsWithIdNotInCollection(tournament.players.map(TournamentPlayer::id))
+                    modelMap.addAttribute("players", players)
+                    tournamentExistingPlayerRegistrationForm.id = players.map(Player::id).firstOrNull()
+                    modelMap.addAttribute("success", "Success")
+                }
+            }
+        } else {
+            modelMap.addAttribute("error", localizedMessageSource.getMessage("tournament.not_found"))
+        }
+        return registerExistingPlayerViewName
+    }
+
+    private val registerPlayerViewName = "tournament/registerPlayer"
+
     @GetMapping("tournament/registerPlayer/", params = arrayOf("id"))
     fun playerForTournamentRegistration(modelMap: ModelMap,
-                                    tournamentPlayerRegistrationForm: TournamentPlayerRegistrationForm,
-                                    id: String): String {
-        val tournament = tournamentService.getById(id).get()
+                                        tournamentPlayerRegistrationForm: TournamentPlayerRegistrationForm,
+                                        id: String): String {
+        val tournament = tournamentService.get(id).get()
         if (tournament != null) {
             modelMap.addAttribute("tournament", tournament)
         } else {
             modelMap.addAttribute("error", localizedMessageSource.getMessage("tournament.not_found"))
         }
-        return "tournament/registerPlayer"
+        return registerPlayerViewName
     }
 
     @PostMapping("tournament/registerPlayer/", params = arrayOf("id"))
     fun registerPlayerForTournament(modelMap: ModelMap,
                                     tournamentPlayerRegistrationForm: TournamentPlayerRegistrationForm,
                                     id: String): String {
-        val tournament = tournamentService.getById(id).get()
+        val tournament = tournamentService.get(id).get()
         if (tournament != null) {
             val firstName = tournamentPlayerRegistrationForm.firstName
             val lastName = tournamentPlayerRegistrationForm.lastName
@@ -216,6 +274,6 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
         } else {
             modelMap.addAttribute("error", localizedMessageSource.getMessage("tournament.not_found"))
         }
-        return "tournament/registerPlayer"
+        return registerPlayerViewName
     }
 }

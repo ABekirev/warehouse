@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.thymeleaf.dialect.IDialect
 import java.nio.file.Paths
+import org.springframework.boot.web.servlet.ServletRegistrationBean
 
 @Configuration
 @EnableWebMvc
@@ -36,8 +37,12 @@ open class WebConfiguration {
     }
 
     @Bean open fun messageSource(): MessageSource {
+        val basePath = Paths.get("locale", "messages").toString()
         return ResourceBundleMessageSource().apply {
-            setBasename(Paths.get("locale", "messages", "messages").toString())
+            addBasenames(
+                    Paths.get(basePath, "messages").toString(),
+                    Paths.get(basePath, "player_game_result").toString()
+            )
         }
     }
 }

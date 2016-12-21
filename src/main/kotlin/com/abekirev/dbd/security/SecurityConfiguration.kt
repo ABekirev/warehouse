@@ -53,7 +53,7 @@ open class SecurityConfiguration() {
                 http
                         .authorizeRequests()
                             .antMatchers("/static/**", "/css/**", "/js/**", "/fonts/**").permitAll()
-                            .antMatchers("/", "/home/", "/tournament/**", "/players/", "/error/**").permitAll()
+                            .antMatchers("/", "/home/", "/tournament/**", "/players/**", "/error/**").permitAll()
                             .antMatchers("/staff/**").hasAnyAuthority(ROLE_ADMIN.name, ROLE_STAFF.name)
                             .antMatchers("/admin/**").hasAuthority(ROLE_ADMIN.name)
                             .anyRequest().authenticated()

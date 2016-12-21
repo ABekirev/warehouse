@@ -18,8 +18,8 @@ class GameService(
             .thenComposeAsync { savedGame ->
                 CompletableFuture.allOf(
                         registerGameForTournament(savedGame),
-                        registerGameForPlayer(game, game.whitePlayer),
-                        registerGameForPlayer(game, game.blackPlayer)
+                        registerGameForPlayer(savedGame, game.whitePlayer),
+                        registerGameForPlayer(savedGame, game.blackPlayer)
                 ).thenApply { ignore -> savedGame }
             }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import java.util.*
 
@@ -21,5 +22,12 @@ class PlayersController @Autowired constructor(private val playerService: Player
                 })
         )
         return "players/list"
+    }
+
+    @GetMapping("/{id}")
+    fun player(modelMap: ModelMap,
+               @PathVariable("id") id: String): String {
+        modelMap.addAttribute("player", playerService.get(id).get()!!)
+        return "players/player"
     }
 }

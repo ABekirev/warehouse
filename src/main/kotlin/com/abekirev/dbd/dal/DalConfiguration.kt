@@ -32,8 +32,9 @@ open class DalConfiguration {
 
     @Bean
     open fun playerDao(playerRepository: PlayerRepository,
-                       playerProjectionRepository: PlayerProjectionRepository): PlayerDao {
-        return PlayerDao(playerRepository, playerProjectionRepository)
+                       playerProjectionRepository: PlayerProjectionRepository,
+                       mongoTemplate: MongoTemplate): PlayerDao {
+        return PlayerDao(playerRepository, playerProjectionRepository, mongoTemplate)
     }
 
     @Bean

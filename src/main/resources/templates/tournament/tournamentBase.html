@@ -10,6 +10,8 @@
             <li><a href="#" th:href="${'/tournament/info/?id=' + tournament.id}" th:text="#{tournament.info}">Информация</a></li>
             <li><a href="#" th:href="${'/tournament/players/?id=' + tournament.id}" th:text="#{tournament.players}">Список участников</a></li>
             <li><a href="#" th:href="${'/staff/tournament/registerPlayer/?id=' + tournament.id}" th:text="#{tournament.addplayer}" th:if="${@authService.staff or @authService.admin}">Добавить участника</a></li>
+            <li><a href="#" th:href="${'/staff/tournament/registerExistingPlayer/?id=' + tournament.id}" th:text="#{tournament.addexistingplayer}" th:if="${@authService.staff or @authService.admin}">Добавить участника</a></li>
+            <li><a href="#" th:href="${'/staff/tournament/registerGame/?id=' + tournament.id}" th:text="#{tournament.addgame}" th:if="${@authService.staff or @authService.admin}">Добавить игру</a></li>
             <li><a href="#" th:href="${'/tournament/schedule/?id=' + tournament.id}" th:text="#{tournament.schedule}">Расписание</a></li>
             <li><a href="#" th:href="${'/tournament/table/?id=' + tournament.id}" th:text="#{tournament.table}">Таблица результатов</a></li>
         </ul>

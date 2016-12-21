@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org"
-      layout:decorator="base">
+      layout:decorator="tournament/tournamentBase">
 <head>
     <title>Регистрация игры</title>
 </head>
 <body>
-<div layout:fragment="content" class="container-fluid">
-    <div id="gameRegistration" class="text-center roundedPanel">
+<div layout:fragment="tournamentsContent" class="container-fluid">
+    <div class="form">
         <p class="error" th:if="${error != null}" th:text="${error}"></p>
         <p th:if="${success != null}" th:text="${success}">Результат был успешно сохранен</p>
+        <!--/*@thymesVar id="tournament" type="com.abekirev.dbd.entity.Tournament"*/-->
         <!--/*@thymesVar id="gameRegistrationForm" type="com.abekirev.dbd.web.controller.staff.GameRegistrationForm"*/-->
-        <form th:action="@{/staff/register/game/}" th:object="${gameRegistrationForm}" method="post">
+        <form th:action="${'/staff/tournament/registerGame/?id=' + tournament.id}" th:object="${gameRegistrationForm}" method="post">
             <table>
                 <tbody>
                 <tr>
@@ -19,7 +20,8 @@
                     <td>
                         <select th:field="*{whitePlayerId}">
                             <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.staff.StaffController.Player>"*/-->
-                            <option th:each="player, itStatus : ${players}" th:value="${player.id}"
+                            <option th:each="player, itStatus : ${players}"
+                                    th:value="${player.id}"
                                     th:text="${player.firstName + ' ' + player.lastName}"
                                     th:selected="${itStatus.first}"></option>
                         </select>
@@ -31,7 +33,8 @@
                     <td>
                         <select th:field="*{blackPlayerId}">
                             <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.staff.StaffController.Player>"*/-->
-                            <option th:each="player, itStatus : ${players}" th:value="${player.id}"
+                            <option th:each="player, itStatus : ${players}"
+                                    th:value="${player.id}"
                                     th:text="${player.firstName + ' ' + player.lastName}"
                                     th:selected="${itStatus.first}"></option>
                         </select>

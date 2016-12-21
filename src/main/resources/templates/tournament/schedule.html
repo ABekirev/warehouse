@@ -8,21 +8,32 @@
 <body>
 <div layout:fragment="tournamentsContent">
     <div id="tournamentTable">
-        <!--/*@thymesVar id="schedule" type="java.util.Collection<java.lang.reflect.Array<kotlin.Pair>>"*/-->
-        <table class="whiteBorderedTable">
-            <thead>
-            <tr>
-                <th></th>
-                <th th:each="turn, itStatus : ${schedule}" th:text="${itStatus.count}"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="turn, itStatus1 : ${schedule}">
-                <td th:text="${itStatus1.count}"></td>
-                <td th:each="i : ${#numbers.sequence(0, itStatus1.count - 1)}" th:text="${turn[i].first.lastName + '-' + turn[i].second.lastName}"></td>
-            </tr>
-            </tbody>
-        </table>
+        <!--/*@thymesVar id="tournament" type="com.abekirev.dbd.entity.Tournament"*/-->
+        <!--/*@thymesVar id="schedule" type="com.abekirev.dbd.web.controller.TournamentController.ScheduleView"*/-->
+        <div th:if="${schedule.tablesCount > 0 and schedule.turnsCount > 0}">
+            <table class="whiteBorderedTable text-center">
+                <thead>
+                <tr>
+                    <th></th>
+                    <td th:each="k : ${#numbers.sequence(0, schedule.tablesCount - 1)}" th:text="${k + 1}"></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="i : ${#numbers.sequence(0, schedule.turnsCount - 1)}">
+                    <td th:text="${i + 1}"></td>
+                    <td th:each="k : ${#numbers.sequence(0, schedule.tablesCount - 1)}"
+                        th:text="${schedule.games[i][k]}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${not (schedule.tablesCount > 0 and schedule.turnsCount > 0)}">
+            <p th:text="${'No schedule'}"/>
+        </div>
+        <form th:if="${@authService.staff or @authService.admin}" class="text-center" th:action="${'/tournament/schedule/gen/'}" method="post">
+            <input type="hidden" name="id" th:value="${tournament.id}"/>
+            <button id="genScheduleButton" th:text="'Generate schedule'"></button>
+        </form>
     </div>
 </div>
 </body>

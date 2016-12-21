@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document(collection = "games")
-data class GameDto private constructor(
+data class GameDto(
         @Id
         var id: String?,
         var tournamentId: String?,

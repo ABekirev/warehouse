@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="tournament/tournamentBase">
+<head>
+    <title>Регистрация существующего игрока</title>
+</head>
+<body>
+<div layout:fragment="tournamentsContent">
+    <div class="form">
+        <p class="error" th:if="${error != null}" th:text="${error}"></p>
+        <p th:if="${success != null}" th:text="${success}">Игрок успешно зарегистрирован</p>
+        <!--/*@thymesVar id="tournament" type="com.abekirev.dbd.entity.Tournament"*/-->
+        <!--/*@thymesVar id="tournamentExistingPlayerRegistrationForm" type="com.abekirev.dbd.web.controller.staff.TournamentExistingPlayerRegistrationForm"*/-->
+        <form th:action="${'/staff/tournament/registerExistingPlayer/?id=' + tournament.id}" th:object="${tournamentExistingPlayerRegistrationForm}" method="post">
+            <select th:field="*{id}">
+                <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.staff.StaffController.Player>"*/-->
+                <option th:each="player, itStatus : ${players}"
+                        th:value="${player.id}"
+                        th:text="${player.firstName + ' ' + player.lastName}"
+                        th:selected="${itStatus.first}"></option>
+            </select>
+            <div class="submitButton"><input type="submit" th:value="#{staff.register.player.button}" value="Зарегистрировать"/></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

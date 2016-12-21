@@ -20,8 +20,8 @@
             <tbody>
             <tr th:each="player, itStatus1 : ${players}">
                 <td th:text="${itStatus1.count}"></td>
+                <td><a th:href="${'/players/' + player.id}" th:text="${player.lastName}"></a></td>
                 <td th:text="${player.firstName}"></td>
-                <td th:text="${player.lastName}"></td>
             </tr>
             </tbody>
         </table>

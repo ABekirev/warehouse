@@ -67,9 +67,9 @@ internal fun tournamentGameDtoToTournamentGame(game: TournamentGameDto): Tournam
             game.blackPlayer?.let(::tournamentPlayerDtoToTournamentPlayer) ?: throw IllegalArgumentException(),
             game.result?.let { result ->
                 when (result) {
-                    GameResult.WhiteWon().dbValue -> WhiteWon()
-                    GameResult.BlackWon().dbValue -> BlackWon()
-                    GameResult.Draw().dbValue -> Draw()
+                    GameResult.WhiteWon.dbValue -> WhiteWon
+                    GameResult.BlackWon.dbValue -> BlackWon
+                    GameResult.Draw.dbValue -> Draw
                     else -> throw IllegalAccessException()
                 }
             } ?: throw IllegalArgumentException()
@@ -113,9 +113,9 @@ internal fun tournamentGameToTournamentGameDto(game: TournamentGame): Tournament
             game.whitePlayer.let(::tournamentPlayerToTournamentPlayerDto),
             game.blackPlayer.let(::tournamentPlayerToTournamentPlayerDto),
             when (game.result) {
-                is WhiteWon -> GameResult.WhiteWon().dbValue
-                is BlackWon -> GameResult.BlackWon().dbValue
-                is Draw -> GameResult.Draw().dbValue
+                is WhiteWon -> GameResult.WhiteWon.dbValue
+                is BlackWon -> GameResult.BlackWon.dbValue
+                is Draw -> GameResult.Draw.dbValue
             }
     )
 }
