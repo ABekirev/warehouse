@@ -27,12 +27,12 @@
                 </tbody>
             </table>
         </div>
-        <div th:if="${not (schedule.tablesCount > 0 and schedule.turnsCount > 0)}">
-            <p th:text="${'No schedule'}"/>
+        <div class="text-center" th:if="${not (schedule.tablesCount > 0 and schedule.turnsCount > 0)}">
+            <p th:text="#{schedule.nodata}"/>
         </div>
         <form th:if="${@authService.staff or @authService.admin}" class="text-center" th:action="${'/tournament/schedule/gen/'}" method="post">
             <input type="hidden" name="id" th:value="${tournament.id}"/>
-            <button id="genScheduleButton" th:text="'Generate schedule'"></button>
+            <button id="genScheduleButton" th:text="#{schedule.generate}"></button>
         </form>
     </div>
 </div>

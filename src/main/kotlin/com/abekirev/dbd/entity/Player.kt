@@ -40,7 +40,7 @@ data class PlayerGame(val id: String,
             game.id!!,
             game.tournamentId,
             game.tournamentName,
-            if (player.isWhite(game)) White() else Black(),
+            if (player.isWhite(game)) White else Black,
             Opponent(if (player.isWhite(game)) game.blackPlayer else game.whitePlayer),
             when (player.isWhite(game)) {
                 true -> when (game.result) {
@@ -82,6 +82,6 @@ sealed class PlayerGameResult {
 }
 
 sealed class PlayerGameSide {
-    class White : PlayerGameSide()
-    class Black : PlayerGameSide()
+    object White : PlayerGameSide()
+    object Black : PlayerGameSide()
 }

@@ -203,7 +203,7 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
                                             id: String): String {
         val tournament = tournamentService.get(id).get()
         if (tournament != null) {
-            val id = tournamentExistingPlayerRegistrationForm.id
+            val id = tournamentExistingPlayerRegistrationForm.playerId
             when (id) {
                 null -> modelMap.addAttribute("error", "Id is null")
                 else -> {
@@ -217,7 +217,7 @@ class StaffController @Autowired constructor(private val playerService: PlayerSe
                     modelMap.addAttribute("tournament", updatedTournament)
                     val players = playerService.getAllProjectionsWithIdNotInCollection(tournament.players.map(TournamentPlayer::id))
                     modelMap.addAttribute("players", players)
-                    tournamentExistingPlayerRegistrationForm.id = players.map(Player::id).firstOrNull()
+                    tournamentExistingPlayerRegistrationForm.playerId = players.map(Player::id).firstOrNull()
                     modelMap.addAttribute("success", "Success")
                 }
             }

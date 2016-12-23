@@ -13,7 +13,7 @@
         <!--/*@thymesVar id="tournament" type="com.abekirev.dbd.entity.Tournament"*/-->
         <!--/*@thymesVar id="tournamentExistingPlayerRegistrationForm" type="com.abekirev.dbd.web.controller.staff.TournamentExistingPlayerRegistrationForm"*/-->
         <form th:action="${'/staff/tournament/registerExistingPlayer/?id=' + tournament.id}" th:object="${tournamentExistingPlayerRegistrationForm}" method="post">
-            <select th:field="*{id}">
+            <select th:field="*{playerId}">
                 <!--/*@thymesVar id="players" type="java.util.Collection<com.abekirev.dbd.web.controller.staff.StaffController.Player>"*/-->
                 <option th:each="player, itStatus : ${players}"
                         th:value="${player.id}"

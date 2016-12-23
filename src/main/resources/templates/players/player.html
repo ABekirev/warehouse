@@ -9,6 +9,7 @@
 <div layout:fragment="content" class="container-fluid">
     <div id="tournamentTable">
         <!--/*@thymesVar id="player" type="com.abekirev.dbd.entity.Player"*/-->
+        <p class="text-center" th:text="#{player.info}"></p>
         <table border="1" cellspacing="0" cellpadding="0" align="center">
             <tbody>
             <tr>
@@ -24,6 +25,7 @@
 
         <br/>
 
+        <p class="text-center" th:text="#{player.games}"></p>
         <table border="1" cellspacing="0" cellpadding="0" align="center">
             <thead>
                 <th th:text="#{player.games.tournamentname}"></th>

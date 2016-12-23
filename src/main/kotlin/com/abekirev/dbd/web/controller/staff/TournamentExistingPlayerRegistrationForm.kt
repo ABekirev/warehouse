@@ -4,5 +4,5 @@ import javax.validation.constraints.NotNull
 
 class TournamentExistingPlayerRegistrationForm(
         @NotNull
-        var id: String? = null
+        var playerId: String? = null
 )

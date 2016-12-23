@@ -12,6 +12,7 @@
         <table class="whiteBorderedTable">
             <thead>
             <tr>
+                <th th:text="#{tournament.table.number}"></th>
                 <th th:text="#{player.lastName}">Фамилия</th>
                 <th th:text="#{player.firstName}">Имя</th>
             </tr>
@@ -21,6 +22,7 @@
                 <td th:text="#{tournament.players.table.nodata}" colspan="6">Результаты отсутствуют</td>
             </tr>
             <tr th:each="p, itStatus : ${players}">
+                <td th:text="${itStatus.count}"></td>
                 <td th:text="${p.firstName}"></td>
                 <td th:text="${p.lastName}"></td>
             </tr>

@@ -81,8 +81,8 @@ class TournamentController @Autowired constructor(
 
     private fun TournamentPlayer.side(game: TournamentGame): PlayerGameSide? {
         return when (id) {
-            game.whitePlayer.id -> PlayerGameSide.White()
-            game.blackPlayer.id -> PlayerGameSide.Black()
+            game.whitePlayer.id -> PlayerGameSide.White
+            game.blackPlayer.id -> PlayerGameSide.Black
             else -> null
         }
     }

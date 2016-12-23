@@ -72,8 +72,8 @@ internal fun playerGameDtoToPlayerGame(game: PlayerGameDto): PlayerGame {
             game.tournamentName!!,
             game.side?.let { side ->
                 when (side) {
-                    PlayerSide.White.dbValue -> White()
-                    PlayerSide.Black.dbValue -> Black()
+                    PlayerSide.White.dbValue -> White
+                    PlayerSide.Black.dbValue -> Black
                     else -> throw IllegalArgumentException()
                 }
             } ?: throw IllegalArgumentException(),
@@ -81,8 +81,8 @@ internal fun playerGameDtoToPlayerGame(game: PlayerGameDto): PlayerGame {
             game.result?.let { result ->
                 when (result) {
                     com.abekirev.dbd.dal.dao.PlayerGameResult.Won.dbValue -> Won
-                    com.abekirev.dbd.dal.dao.PlayerGameResult.Draw.dbValue -> Lost
-                    com.abekirev.dbd.dal.dao.PlayerGameResult.Lost.dbValue -> Draw
+                    com.abekirev.dbd.dal.dao.PlayerGameResult.Lost.dbValue -> Lost
+                    com.abekirev.dbd.dal.dao.PlayerGameResult.Draw.dbValue -> Draw
                     else -> throw IllegalArgumentException()
                 }
             } ?: throw IllegalArgumentException()
