@@ -5,15 +5,12 @@ import com.abekirev.dbd.entity.GameResult.BlackWon
 import com.abekirev.dbd.entity.GameResult.Draw
 import com.abekirev.dbd.entity.GameResult.WhiteWon
 import com.abekirev.dbd.entity.PlayerGameResult
-import com.abekirev.dbd.entity.PlayerGameResult.Lost
-import com.abekirev.dbd.entity.PlayerGameResult.Won
 import com.abekirev.dbd.entity.PlayerGameSide
 import com.abekirev.dbd.entity.PlayerGameSide.Black
 import com.abekirev.dbd.entity.PlayerGameSide.White
 import com.abekirev.dbd.entity.Schedule
 import com.abekirev.dbd.entity.TournamentGame
 import com.abekirev.dbd.entity.TournamentPlayer
-import com.abekirev.dbd.isOdd
 import com.abekirev.dbd.service.PlayerService
 import com.abekirev.dbd.service.TournamentService
 import com.abekirev.dbd.toList
@@ -70,13 +67,13 @@ class TournamentController @Autowired constructor(
     private fun playerGameResult(result: GameResult, side: PlayerGameSide): PlayerGameResult {
         return when (side) {
             is White -> when (result) {
-                is WhiteWon -> Won
-                is BlackWon -> Lost
+                is WhiteWon -> PlayerGameResult.Won
+                is BlackWon -> PlayerGameResult.Lost
                 is Draw -> PlayerGameResult.Draw
             }
             is Black -> when (result) {
-                is WhiteWon -> PlayerGameResult.Draw
-                is BlackWon -> Won
+                is WhiteWon -> PlayerGameResult.Lost
+                is BlackWon -> PlayerGameResult.Won
                 is Draw -> PlayerGameResult.Draw
             }
         }

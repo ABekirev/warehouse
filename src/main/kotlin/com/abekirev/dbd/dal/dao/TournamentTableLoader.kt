@@ -34,8 +34,8 @@ fun loadTournamentTable(playersCount: Int): TournamentTable {
                 .toList()
                 .toMap()
     }
-    val turnsCount = map.entries.map { it.key.number }.max()!!
-    val tablesCount = map.flatMap { it.value.entries.map { it.key.number } }.max()!!
+    val turnsCount = map.entries.map { it.key.number }.max()!! + 1
+    val tablesCount = map.flatMap { it.value.entries.map { it.key.number } }.max()!! + 1
     return TournamentTable(
             playersCount,
             tablesCount,

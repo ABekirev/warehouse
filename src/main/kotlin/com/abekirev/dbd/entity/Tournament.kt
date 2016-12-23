@@ -35,7 +35,7 @@ data class Tournament(val id: String?,
     }
 
     fun changeSchedule(schedule: Collection<Schedule>): Tournament {
-        return Tournament(id, name, dateFrom, dateTo, players, schedule, games, winner)
+        return Tournament(id, name, dateFrom, dateTo, players, schedule, emptyList(), null)
     }
 }
 

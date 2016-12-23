@@ -23,7 +23,7 @@ data class Player(override val id: String?,
     constructor(id: String?, firstName: String, lastName: String) : this(id, firstName, lastName, emptySet())
 
     fun addGame(game: PlayerGame): Player {
-        return Player(id, firstName, lastName, games.filter { game.opponent.id != it.opponent.id }.plus(game))
+        return Player(id, firstName, lastName, games.filter { !(game.tournamentId == it.tournamentId && game.opponent.id == it.opponent.id) }.plus(game))
     }
 }
 
@@ -41,7 +41,7 @@ data class PlayerGame(val id: String,
             game.tournamentId,
             game.tournamentName,
             if (player.isWhite(game)) White() else Black(),
-            Opponent(if (player.isWhite(game)) game.whitePlayer else game.blackPlayer),
+            Opponent(if (player.isWhite(game)) game.blackPlayer else game.whitePlayer),
             when (player.isWhite(game)) {
                 true -> when (game.result) {
                     is GameResult.WhiteWon -> Won

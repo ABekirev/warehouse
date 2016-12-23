@@ -60,6 +60,7 @@ dependencies {
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.10.1'
 	compile group: 'one.util', name: 'streamex', version: '0.6.4'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.5'
+	compile 'org.mongodb:mongodb-driver:3.4.1'
 
 	compile("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
 //	compile('org.jetbrains.kotlin:kotlin-nosql-mongodb:0.1-SNAPSHOT')
