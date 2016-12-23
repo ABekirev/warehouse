@@ -14,7 +14,7 @@
             <table class="whiteBorderedTable text-center">
                 <thead>
                 <tr>
-                    <th></th>
+                    <th th:text="#{schedule.turn} + '\\' + #{schedule.table}"></th>
                     <td th:each="k : ${#numbers.sequence(0, schedule.tablesCount - 1)}" th:text="${k + 1}"></td>
                 </tr>
                 </thead>
